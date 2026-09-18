@@ -1,0 +1,9 @@
+{
+  "applicant_id": "APP008",
+  "active_loans": [
+    {
+      "lender": "SBI",
+      "monthly_emi": 12000
+    }
+  ]
+}

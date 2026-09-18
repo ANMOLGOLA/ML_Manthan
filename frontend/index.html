@@ -1,0 +1,392 @@
+<!DOCTYPE html>
+<html class="h-full" lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+  <title>DocCheck Enterprise Login</title>
+  <!-- Google Fonts: Inter -->
+  <link href="https://fonts.googleapis.com" rel="preconnect"/>
+  <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=JetBrains+Mono:wght@400;500&amp;display=swap" rel="stylesheet"/>
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Inter', 'sans-serif'],
+            mono: ['JetBrains Mono', 'monospace'],
+          },
+          colors: {
+            brand: {
+              dark: '#0F1B2E',
+              darker: '#0A1321',
+              accent: '#1E3A5F',
+              cyan: '#38BDF8',
+              slate: '#94A3B8',
+              border: '#1E2D42'
+            },
+            surface: {
+              light: '#FAFAFA',
+              border: '#E2E8F0'
+            },
+            status: {
+              error: '#D93025',
+              lockbg: '#FEF2F2',
+              lockborder: '#FCA5A5'
+            }
+          }
+        }
+      }
+    }
+  </script>
+  <!-- BEGIN: CSS Stylesheets -->
+  <style data-purpose="background-grid">
+    /* Subtle technical grid for the enterprise security backdrop */
+    .tech-grid {
+      background-size: 32px 32px;
+      background-image: 
+        linear-gradient(to right, rgba(56, 189, 248, 0.04) 1px, transparent 1px),
+        linear-gradient(to bottom, rgba(56, 189, 248, 0.04) 1px, transparent 1px);
+    }
+    .radar-circle {
+      background: radial-gradient(circle at 60% 50%, rgba(30, 58, 95, 0.45) 0%, transparent 70%);
+    }
+  </style>
+  <style data-purpose="custom-elements">
+    /* Smooth transition for state toggles and focus rings */
+    input:focus {
+      outline: none;
+      box-shadow: 0 0 0 2px rgba(15, 27, 46, 0.15);
+    }
+    .custom-scrollbar::-webkit-scrollbar {
+      width: 4px;
+    }
+    .custom-scrollbar::-webkit-scrollbar-thumb {
+      background-color: rgba(148, 163, 184, 0.2);
+      border-radius: 9999px;
+    }
+  </style>
+  <!-- END: CSS Stylesheets -->
+</head>
+<body class="h-full bg-surface-light text-slate-800 font-sans antialiased overflow-x-hidden selection:bg-cyan-500/20">
+  <!-- BEGIN: Application Shell -->
+  <div class="min-h-screen w-full flex flex-col lg:flex-row" data-purpose="main-layout">
+    <!-- BEGIN: LeftBrandPanel -->
+    <aside aria-label="DocCheck Information Panel" class="relative flex-1 lg:w-[54%] bg-brand-dark tech-grid flex flex-col justify-between p-8 sm:p-12 lg:p-16 border-r border-brand-border text-white overflow-hidden">
+      <!-- Ambient subtle glow background elements -->
+      <div aria-hidden="true" class="absolute inset-0 radar-circle pointer-events-none"></div>
+      <div aria-hidden="true" class="absolute -right-24 top-1/3 w-96 h-96 border border-cyan-500/10 rounded-full pointer-events-none hidden lg:block"></div>
+      <div aria-hidden="true" class="absolute -right-8 top-1/3 w-64 h-64 border border-cyan-500/10 rounded-full pointer-events-none hidden lg:block"></div>
+      <!-- Top Branding & Telemetry Header -->
+      <div class="relative z-10">
+        <header class="flex items-center gap-3.5">
+          <!-- Official Brand Icon -->
+          <div class="flex-shrink-0" data-purpose="brand-icon">
+            <svg class="shadow-md rounded-lg" fill="none" height="38" viewbox="0 0 40 40" width="38" xmlns="http://www.w3.org/2000/svg">
+              <rect fill="#0F172A" height="40" rx="8" width="40"></rect>
+              <path d="M12 10H24L29 15V30C29 31.1046 28.1046 32 27 32H12C10.8954 32 10 31.1046 10 30V12C10 10.8954 10.8954 10 12 10Z" stroke="#94A3B8" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+              <path d="M23 10V16H29" stroke="#94A3B8" stroke-linejoin="round" stroke-width="2"></path>
+              <path d="M16 21L19 24L25 18" stroke="#38BDF8" stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5"></path>
+            </svg>
+          </div>
+          <div class="flex items-center gap-3">
+            <span class="text-xl font-bold tracking-tight text-white">DocCheck</span>
+            <span class="inline-flex items-center px-2 py-0.5 rounded text-[11px] font-mono font-medium tracking-wide bg-slate-800/80 text-cyan-400 border border-slate-700/60 shadow-sm">
+              v2.4 // REG-CFPB1002
+            </span>
+          </div>
+        </header>
+        <!-- Main Narrative Section -->
+        <div class="mt-14 max-w-xl">
+          <!-- Infrastructure status pill -->
+          <div class="inline-flex items-center gap-2 px-2.5 py-1 rounded-full text-xs font-mono tracking-wider font-semibold uppercase bg-cyan-950/40 text-cyan-400 border border-cyan-500/25 mb-6">
+            <span class="w-1.5 h-1.5 rounded-full bg-cyan-400 animate-pulse"></span>
+            RESTRICTED BANKING INFRASTRUCTURE
+          </div>
+          <!-- Headline (strictly constrained to single-line feel) -->
+          <h1 class="text-2xl sm:text-3xl xl:text-4xl font-bold tracking-tight text-white leading-tight">
+            Cross-check credit documents. Catch discrepancies instantly.
+          </h1>
+          <!-- Subtext (strictly 1 line) -->
+          <p class="mt-3 text-sm sm:text-base text-slate-400 font-normal tracking-wide">
+            Automated verification for loan officers.
+          </p>
+        </div>
+        <!-- 3 Feature Bullets (Strictly 1 line description per requirement) -->
+        <div class="mt-12 space-y-6 max-w-lg" data-purpose="feature-list">
+          <!-- Feature 1 -->
+          <article class="flex items-start gap-4 group">
+            <div class="w-9 h-9 rounded-lg bg-slate-900/80 border border-slate-800 flex items-center justify-center flex-shrink-0 text-cyan-400">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+                <path d="M8 7v8a2 2 0 002 2h6M8 7V5a2 2 0 012-2h4.586a1 1 0 01.707.293l4.414 4.414a1 1 0 01.293.707V15a2 2 0 01-2 2h-2M8 7H6a2 2 0 00-2 2v10a2 2 0 002 2h8a2 2 0 002-2v-2" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+              </svg>
+            </div>
+            <div>
+              <h2 class="text-sm font-semibold text-slate-200 tracking-tight">Cross-document checks</h2>
+              <p class="text-xs text-slate-400 font-normal mt-0.5">Form, bank statement, payslip — matched instantly</p>
+            </div>
+          </article>
+          <!-- Feature 2 -->
+          <article class="flex items-start gap-4 group">
+            <div class="w-9 h-9 rounded-lg bg-slate-900/80 border border-slate-800 flex items-center justify-center flex-shrink-0 text-cyan-400">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+                <path d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+              </svg>
+            </div>
+            <div>
+              <h2 class="text-sm font-semibold text-slate-200 tracking-tight">Full evidence trail</h2>
+              <p class="text-xs text-slate-400 font-normal mt-0.5">Every flag backed by source data</p>
+            </div>
+          </article>
+          <!-- Feature 3 -->
+          <article class="flex items-start gap-4 group">
+            <div class="w-9 h-9 rounded-lg bg-slate-900/80 border border-slate-800 flex items-center justify-center flex-shrink-0 text-cyan-400">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+                <path d="M3 6l3 1m0 0l-3 9a5.002 5.002 0 006.001 0M6 7l3 9M6 7l6-2m6 2l3-1m-3 1l-3 9a5.002 5.002 0 006.001 0M18 7l3 9m-3-9l-6-2m0-2v2m0 16V5m0 16H9m3 0h3" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+              </svg>
+            </div>
+            <div>
+              <h2 class="text-sm font-semibold text-slate-200 tracking-tight">Human makes the call</h2>
+              <p class="text-xs text-slate-400 font-normal mt-0.5">AI flags, reviewers decide</p>
+            </div>
+          </article>
+        </div>
+      </div>
+      <!-- Left Panel Bottom Telemetry -->
+      <footer class="relative z-10 pt-8 mt-12 border-t border-slate-800/80 flex flex-wrap items-center justify-between gap-4 text-xs font-mono text-slate-400" data-purpose="telemetry-bar">
+        <div class="flex items-center gap-2">
+          <span class="inline-block w-2 h-2 rounded-full bg-emerald-400"></span>
+          <span class="text-slate-300">Connected · Secure session</span>
+        </div>
+        <div class="flex items-center gap-4 text-slate-400">
+          <span>ENCLAVE TLS 1.3</span>
+          <span class="text-slate-600">|</span>
+          <span>LATENCY <span class="text-emerald-400">14ms</span></span>
+        </div>
+      </footer>
+    </aside>
+    <!-- END: LeftBrandPanel -->
+    <!-- BEGIN: RightAuthPanel -->
+    <main aria-label="Sign In Authentication Portal" class="flex-1 lg:w-[46%] bg-surface-light flex flex-col justify-between p-6 sm:p-10 lg:p-12 min-h-full">
+      <!-- Interactive State Switcher Header -->
+      <nav aria-label="State Preview Controls" class="flex items-center justify-between sm:justify-end gap-3 pb-6 border-b border-slate-200/80" data-purpose="state-switcher">
+        <span class="text-[11px] uppercase tracking-wider font-mono font-medium text-slate-400">State:</span>
+        <div class="inline-flex rounded-md p-0.5 bg-slate-100 border border-slate-200 text-xs font-medium text-slate-600" role="group">
+          <button class="state-btn px-2.5 py-1 rounded bg-white text-slate-900 font-medium shadow-xs transition-all" id="btn-default" onclick="setState('default')" type="button">Default</button>
+          <button class="state-btn px-2.5 py-1 rounded hover:text-slate-900 transition-all" id="btn-error" onclick="setState('error')" type="button">Error</button>
+          <button class="state-btn px-2.5 py-1 rounded hover:text-slate-900 transition-all" id="btn-loading" onclick="setState('loading')" type="button">Loading</button>
+          <button class="state-btn px-2.5 py-1 rounded hover:text-slate-900 transition-all" id="btn-locked" onclick="setState('locked')" type="button">Locked</button>
+        </div>
+      </nav>
+      <!-- Center Form Container -->
+      <section class="w-full max-w-[400px] mx-auto my-auto py-8">
+        <!-- Header Copy (Crisp & strictly 1 line each) -->
+        <div class="mb-7">
+          <h2 class="text-2xl font-bold tracking-tight text-slate-900">Sign in to DocCheck</h2>
+          <p class="mt-1 text-sm text-slate-500">Use your organization credentials.</p>
+        </div>
+        <!-- Locked Alert Box (Visible in Locked state only) -->
+        <div class="hidden mb-5 p-3.5 rounded-md bg-status-lockbg border border-status-lockborder text-status-error text-xs flex items-center justify-between" id="locked-banner" role="alert">
+          <div class="flex items-center gap-2">
+            <svg class="w-4 h-4 flex-shrink-0" fill="currentColor" viewbox="0 0 20 20">
+              <path clip-rule="evenodd" d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z" fill-rule="evenodd"></path>
+            </svg>
+            <span class="font-medium">Account locked — contact IT (ext. 4402)</span>
+          </div>
+          <a class="underline font-semibold hover:text-red-800 ml-2 whitespace-nowrap" href="#">Support</a>
+        </div>
+        <!-- Authentication Form -->
+        <form class="space-y-4" id="auth-form" novalidate="" onsubmit="event.preventDefault();">
+          <!-- Field 1: Work Email / Bank ID -->
+          <div>
+            <label class="block text-xs font-semibold tracking-wider text-slate-700 uppercase mb-1.5" for="work-id">
+              Work Email or Bank ID
+            </label>
+            <div class="relative">
+              <input class="w-full rounded-md border border-slate-300 px-3 py-2 text-sm text-slate-900 placeholder:text-slate-400 focus:border-slate-800 transition-colors" id="work-id" name="work-id" placeholder="s.jenkins@meridianbank.internal" required="" type="text" value="s.jenkins@meridianbank.internal"/>
+              <div class="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none text-slate-400">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+                  <path d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+                </svg>
+              </div>
+            </div>
+          </div>
+          <!-- Field 2: Password -->
+          <div>
+            <label class="block text-xs font-semibold tracking-wider text-slate-700 uppercase mb-1.5" for="password">
+              Password
+            </label>
+            <div class="relative">
+              <input class="w-full rounded-md border border-slate-300 px-3 py-2 text-sm text-slate-900 placeholder:text-slate-400 focus:border-slate-800 transition-colors pr-10" id="password" name="password" placeholder="••••••••••••••••" required="" type="password" value="SecureAuthCredential1002"/>
+              <!-- Password Toggle Icon -->
+              <button aria-label="Toggle password visibility" class="absolute inset-y-0 right-0 flex items-center pr-3 text-slate-400 hover:text-slate-600 focus:outline-none" id="toggle-password-btn" onclick="togglePasswordVisibility()" type="button">
+                <svg class="w-4 h-4" fill="none" id="eye-icon" stroke="currentColor" viewbox="0 0 24 24">
+                  <path d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+                  <path d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+                </svg>
+              </button>
+            </div>
+            <!-- Error message container (Directly under password field per specification) -->
+            <p class="hidden mt-1.5 text-xs text-status-error font-medium flex items-center gap-1.5" id="error-text">
+              <svg class="w-3.5 h-3.5 inline flex-shrink-0" fill="currentColor" viewbox="0 0 20 20">
+                <path clip-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" fill-rule="evenodd"></path>
+              </svg>
+              Incorrect username or password.
+            </p>
+          </div>
+          <!-- Options Row: Checkbox & Forgot Password Link -->
+          <div class="flex items-center justify-between text-xs pt-1">
+            <label class="flex items-center gap-2 cursor-pointer select-none text-slate-700 font-medium">
+              <input checked="" class="rounded border-slate-300 text-brand-dark focus:ring-brand-dark h-4 w-4" id="remember-device" type="checkbox"/>
+              <span>Remember this device</span>
+            </label>
+            <a class="text-slate-600 hover:text-slate-900 font-medium underline-offset-2 hover:underline" href="#" id="forgot-pw-link">
+              Forgot password?
+            </a>
+          </div>
+          <!-- Primary Submit Button -->
+          <div class="pt-2">
+            <button class="w-full flex items-center justify-center gap-2 py-2.5 px-4 rounded-md bg-[#0F1B2E] hover:bg-[#1E293B] text-white text-sm font-semibold transition-all shadow-sm focus:outline-none focus:ring-2 focus:ring-slate-700 disabled:opacity-50 disabled:cursor-not-allowed" id="submit-btn" type="submit">
+              <span id="btn-text">Sign In</span>
+              <svg class="w-4 h-4 transition-transform" fill="none" id="btn-arrow" stroke="currentColor" viewbox="0 0 24 24">
+                <path d="M14 5l7 7m0 0l-7 7m7-7H3" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+              </svg>
+              <!-- Animated Loading Spinner -->
+              <svg class="hidden w-4 h-4 animate-spin" fill="none" id="btn-spinner" viewbox="0 0 24 24">
+                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                <path class="opacity-75" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" fill="currentColor"></path>
+              </svg>
+            </button>
+          </div>
+        </form>
+        <!-- SSO Divider -->
+        <div class="relative my-5" data-purpose="separator">
+          <div class="absolute inset-0 flex items-center">
+            <div class="w-full border-t border-slate-200"></div>
+          </div>
+          <div class="relative flex justify-center text-[11px] uppercase font-mono tracking-wider">
+            <span class="bg-surface-light px-3 text-slate-400">or continue with</span>
+          </div>
+        </div>
+        <!-- Secondary SSO Action -->
+        <button class="w-full flex items-center justify-center gap-2.5 py-2 px-4 rounded-md border border-slate-300 bg-white hover:bg-slate-50 text-slate-700 text-xs font-medium transition-colors focus:outline-none disabled:opacity-50 disabled:cursor-not-allowed shadow-2xs" id="sso-btn" type="button">
+          <!-- Enterprise SSO Key/Shield Icon -->
+          <svg class="w-4 h-4 text-slate-500" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+            <path d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+          </svg>
+          <span>Sign in with SSO</span>
+          <span class="text-slate-400 text-[10px] font-mono">(Okta / Azure AD)</span>
+        </button>
+      </section>
+      <!-- Bottom Compliance Footer -->
+      <footer class="pt-6 border-t border-slate-200/80 text-[11px] text-slate-500 font-mono flex items-center justify-between flex-wrap gap-2" data-purpose="compliance-footer">
+        <span>Authorized personnel only. Activity is logged.</span>
+        <span class="flex items-center gap-1.5 text-slate-600">
+          <svg class="w-3 h-3 text-emerald-600 inline" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+            <path d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+          </svg>
+          256-bit encrypted
+        </span>
+      </footer>
+    </main>
+    <!-- END: RightAuthPanel -->
+  </div>
+  <!-- END: Application Shell -->
+  <!-- BEGIN: Script Interactivity -->
+  <script data-purpose="state-machine">
+    /**
+     * Interactive state management for the DocCheck login form
+     * Handles 4 distinct UX scenarios requested: Default, Error, Loading, Locked
+     */
+    function setState(state) {
+      const emailInput = document.getElementById('work-id');
+      const pwInput = document.getElementById('password');
+      const submitBtn = document.getElementById('submit-btn');
+      const ssoBtn = document.getElementById('sso-btn');
+      const rememberCheckbox = document.getElementById('remember-device');
+      const errorText = document.getElementById('error-text');
+      const lockedBanner = document.getElementById('locked-banner');
+      const btnText = document.getElementById('btn-text');
+      const btnArrow = document.getElementById('btn-arrow');
+      const btnSpinner = document.getElementById('btn-spinner');
+
+      // Update switcher button active state styles
+      const states = ['default', 'error', 'loading', 'locked'];
+      states.forEach(s => {
+        const btn = document.getElementById(`btn-${s}`);
+        if (s === state) {
+          btn.className = 'state-btn px-2.5 py-1 rounded bg-white text-slate-900 font-semibold shadow-xs';
+        } else {
+          btn.className = 'state-btn px-2.5 py-1 rounded text-slate-500 hover:text-slate-900';
+        }
+      });
+
+      // Reset base behaviors
+      emailInput.disabled = false;
+      pwInput.disabled = false;
+      submitBtn.disabled = false;
+      ssoBtn.disabled = false;
+      rememberCheckbox.disabled = false;
+      
+      pwInput.classList.remove('border-status-error', 'focus:border-status-error');
+      pwInput.classList.add('border-slate-300');
+      errorText.classList.add('hidden');
+      lockedBanner.classList.add('hidden');
+
+      btnText.textContent = 'Sign In';
+      btnArrow.classList.remove('hidden');
+      btnSpinner.classList.add('hidden');
+
+      // Apply specific state
+      switch (state) {
+        case 'error':
+          pwInput.classList.remove('border-slate-300');
+          pwInput.classList.add('border-status-error');
+          errorText.classList.remove('hidden');
+          pwInput.focus();
+          break;
+
+        case 'loading':
+          emailInput.disabled = true;
+          pwInput.disabled = true;
+          submitBtn.disabled = true;
+          ssoBtn.disabled = true;
+          rememberCheckbox.disabled = true;
+          btnText.textContent = 'Signing in...';
+          btnArrow.classList.add('hidden');
+          btnSpinner.classList.remove('hidden');
+          break;
+
+        case 'locked':
+          emailInput.disabled = true;
+          pwInput.disabled = true;
+          submitBtn.disabled = true;
+          ssoBtn.disabled = true;
+          rememberCheckbox.disabled = true;
+          lockedBanner.classList.remove('hidden');
+          break;
+
+        case 'default':
+        default:
+          // Default clean state
+          break;
+      }
+    }
+
+    /**
+     * Password reveal toggle helper
+     */
+    function togglePasswordVisibility() {
+      const pwInput = document.getElementById('password');
+      if (pwInput.type === 'password') {
+        pwInput.type = 'text';
+      } else {
+        pwInput.type = 'password';
+      }
+    }
+  </script>
+  <!-- END: Script Interactivity -->
+</body>
+</html>

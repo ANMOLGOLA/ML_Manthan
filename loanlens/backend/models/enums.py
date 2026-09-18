@@ -1,0 +1,32 @@
+from enum import Enum
+
+class DocumentType(str, Enum):
+    LOAN_APPLICATION = "LOAN_APPLICATION"
+    SALARY_SLIP = "SALARY_SLIP"
+    BANK_STATEMENT = "BANK_STATEMENT"
+    LIABILITY_REPORT = "LIABILITY_REPORT"
+
+class ExtractionStatus(str, Enum):
+    SUCCESS = "SUCCESS"
+    MISSING = "MISSING"
+    LOW_CONFIDENCE = "LOW_CONFIDENCE"
+    FAILURE = "FAILURE"
+
+class RuleStatus(str, Enum):
+    PASS = "PASS"
+    INCONSISTENT = "INCONSISTENT"
+    INSUFFICIENT_DATA = "INSUFFICIENT_DATA"
+    CALCULATION_FAILURE = "CALCULATION_FAILURE"
+    DATA_QUALITY_ISSUE = "DATA_QUALITY_ISSUE"
+
+class FlagStatus(str, Enum):
+    PASS = "PASS"
+    FAIL = "FAIL"
+    WARNING = "WARNING"
+    NEEDS_REVIEW = "NEEDS_REVIEW"
+
+class SeverityLevel(str, Enum):
+    LOW = "LOW"
+    MEDIUM = "MEDIUM"
+    HIGH = "HIGH"
+

@@ -1,0 +1,409 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Loan Document Processing & Risk Audit Engine</title>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+
+    <div class="app-container">
+        <!-- Sidebar Navigation -->
+        <aside class="sidebar">
+            <div class="brand">
+                <div class="brand-icon">
+                    <i class="fa-solid fa-shield-halved"></i>
+                </div>
+                <div class="brand-text">
+                    <h2>LendGuard AI</h2>
+                    <span>Risk & Audit Engine</span>
+                </div>
+            </div>
+
+            <nav class="nav-menu">
+                <button class="nav-item active" data-tab="dashboard">
+                    <i class="fa-solid fa-chart-pie"></i>
+                    <span>Dashboard</span>
+                </button>
+                <button class="nav-item" data-tab="pipeline">
+                    <i class="fa-solid fa-diagram-project"></i>
+                    <span>Pipeline Visualizer</span>
+                </button>
+                <button class="nav-item" data-tab="upload">
+                    <i class="fa-solid fa-file-arrow-up"></i>
+                    <span>Document Processing</span>
+                </button>
+                <button class="nav-item" data-tab="review">
+                    <i class="fa-solid fa-list-check"></i>
+                    <span>Review Queue</span>
+                    <span class="badge" id="badge-queue-count">0</span>
+                </button>
+            </nav>
+
+            <div class="sidebar-footer">
+                <button class="btn btn-outline btn-block" id="btn-reseed">
+                    <i class="fa-solid fa-rotate-right"></i> Reset & Seed Batch
+                </button>
+                <div class="system-status">
+                    <span class="pulse-dot"></span> System Operational
+                </div>
+            </div>
+        </aside>
+
+        <!-- Main Content Area -->
+        <main class="main-content">
+
+            <!-- Top Header -->
+            <header class="top-header">
+                <div class="header-title">
+                    <h1 id="page-title">Loan Processing & Audit Dashboard</h1>
+                    <p id="page-subtitle">Real-time document extraction, schema validation, calculations & evidence chain auditing</p>
+                </div>
+                <div class="header-actions">
+                    <div class="search-box">
+                        <i class="fa-solid fa-magnifying-glass"></i>
+                        <input type="text" id="global-search" placeholder="Search Applicant, ID, or Tax ID...">
+                    </div>
+                </div>
+            </header>
+
+            <!-- TAB 1: DASHBOARD -->
+            <section class="tab-content active" id="tab-dashboard">
+                <!-- KPI Stat Cards -->
+                <div class="kpi-grid">
+                    <div class="kpi-card">
+                        <div class="kpi-icon blue">
+                            <i class="fa-solid fa-folder-open"></i>
+                        </div>
+                        <div class="kpi-info">
+                            <span class="kpi-label">Total Applications</span>
+                            <h3 class="kpi-value" id="kpi-total">0</h3>
+                        </div>
+                    </div>
+
+                    <div class="kpi-card">
+                        <div class="kpi-icon green">
+                            <i class="fa-solid fa-circle-check"></i>
+                        </div>
+                        <div class="kpi-info">
+                            <span class="kpi-label">Approved (Clean)</span>
+                            <h3 class="kpi-value" id="kpi-approved">0</h3>
+                        </div>
+                    </div>
+
+                    <div class="kpi-card">
+                        <div class="kpi-icon amber">
+                            <i class="fa-solid fa-triangle-exclamation"></i>
+                        </div>
+                        <div class="kpi-info">
+                            <span class="kpi-label">Flagged / Queue</span>
+                            <h3 class="kpi-value" id="kpi-flagged">0</h3>
+                        </div>
+                    </div>
+
+                    <div class="kpi-card">
+                        <div class="kpi-icon red">
+                            <i class="fa-solid fa-user-shield"></i>
+                        </div>
+                        <div class="kpi-info">
+                            <span class="kpi-label">Manual Review Needed</span>
+                            <h3 class="kpi-value" id="kpi-manual">0</h3>
+                        </div>
+                    </div>
+
+                    <div class="kpi-card">
+                        <div class="kpi-icon purple">
+                            <i class="fa-solid fa-calculator"></i>
+                        </div>
+                        <div class="kpi-info">
+                            <span class="kpi-label">Avg Debt-to-Income (DTI)</span>
+                            <h3 class="kpi-value" id="kpi-dti">0%</h3>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Recent Audits Table & Risk Breakdown -->
+                <div class="dashboard-grid">
+                    <!-- Left: Recent Applications Table -->
+                    <div class="card card-table">
+                        <div class="card-header">
+                            <h3><i class="fa-solid fa-clock-rotate-left"></i> Recent Loan Audits</h3>
+                            <button class="btn btn-sm btn-ghost" id="btn-refresh">
+                                <i class="fa-solid fa-arrows-rotate"></i> Refresh
+                            </button>
+                        </div>
+                        <div class="table-responsive">
+                            <table class="data-table">
+                                <thead>
+                                    <tr>
+                                        <th>Application ID</th>
+                                        <th>Applicant</th>
+                                        <th>Income (Stated vs Bank)</th>
+                                        <th>DTI Ratio</th>
+                                        <th>Risk Level</th>
+                                        <th>Status</th>
+                                        <th>Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="tbody-recent">
+                                    <!-- Dynamic rows -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <!-- Right: Inconsistency Insights -->
+                    <div class="card card-insights">
+                        <div class="card-header">
+                            <h3><i class="fa-solid fa-bug"></i> Audit Inconsistencies</h3>
+                        </div>
+                        <div class="insights-list" id="insights-container">
+                            <!-- Dynamic list -->
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- TAB 2: PIPELINE VISUALIZER -->
+            <section class="tab-content" id="tab-pipeline">
+                <div class="card">
+                    <div class="card-header">
+                        <h3><i class="fa-solid fa-diagram-next"></i> End-to-End Audit Pipeline Execution Architecture</h3>
+                        <p class="subtitle">Click any stage to simulate live document processing & observe state transitions</p>
+                    </div>
+
+                    <!-- Flowchart Container -->
+                    <div class="pipeline-flowchart">
+
+                        <div class="node-box" id="node-upload" onclick="triggerPipelineDemo('upload')">
+                            <div class="node-header"><i class="fa-solid fa-cloud-arrow-up"></i> Upload / Input</div>
+                            <div class="node-desc">Loan Applications, Bank Statements, Payslips</div>
+                        </div>
+                        <div class="flow-arrow"><i class="fa-solid fa-arrow-down"></i></div>
+
+                        <div class="node-box" id="node-extraction" onclick="triggerPipelineDemo('extraction')">
+                            <div class="node-header"><i class="fa-solid fa-brain"></i> Extraction Engine</div>
+                            <div class="node-desc">Regex / Rule-Based LLM Parsing & Field Extraction</div>
+                        </div>
+                        <div class="flow-arrow"><i class="fa-solid fa-arrow-down"></i></div>
+
+                        <div class="node-box" id="node-schema" onclick="triggerPipelineDemo('schema')">
+                            <div class="node-header"><i class="fa-solid fa-list-check"></i> Schema Validation</div>
+                            <div class="node-desc">Pydantic Type Check, Missing Fields, Formatting</div>
+                        </div>
+                        <div class="flow-arrow"><i class="fa-solid fa-arrow-down"></i></div>
+
+                        <div class="node-box" id="node-normalization" onclick="triggerPipelineDemo('normalization')">
+                            <div class="node-header"><i class="fa-solid fa-wand-magic-sparkles"></i> Normalization</div>
+                            <div class="node-desc">Currency Standardization & Date Uniformity</div>
+                        </div>
+                        <div class="flow-arrow"><i class="fa-solid fa-arrow-down"></i></div>
+
+                        <div class="node-box highlight-box" id="node-calculation" onclick="triggerPipelineDemo('calculation')">
+                            <div class="node-header"><i class="fa-solid fa-calculator"></i> Calculation Engine</div>
+                            <div class="node-desc">Average Salary • Recurring Debits • Total EMI • DTI</div>
+                        </div>
+                        <div class="flow-arrow"><i class="fa-solid fa-arrow-down"></i></div>
+
+                        <div class="node-box highlight-box" id="node-rules" onclick="triggerPipelineDemo('rules')">
+                            <div class="node-header"><i class="fa-solid fa-gavel"></i> Rule Engine</div>
+                            <div class="node-desc">Salary Mismatch • Undeclared EMI • Staleness • DTI Limit</div>
+                        </div>
+                        <div class="flow-arrow"><i class="fa-solid fa-split"></i></div>
+
+                        <!-- Branching Nodes -->
+                        <div class="branch-grid">
+                            <div class="branch-col">
+                                <div class="node-box alert-red" id="node-failure">
+                                    <div class="node-header"><i class="fa-solid fa-file-circle-xmark"></i> Extraction Failure</div>
+                                    <div class="node-desc">Corrupted / Illegible OCR</div>
+                                </div>
+                                <div class="flow-arrow"><i class="fa-solid fa-arrow-down"></i></div>
+                                <div class="node-box" id="node-manual">
+                                    <div class="node-header"><i class="fa-solid fa-user-gear"></i> Manual Review</div>
+                                    <div class="node-desc">Human Auditor Exception Handing</div>
+                                </div>
+                            </div>
+
+                            <div class="branch-col">
+                                <div class="node-box alert-amber" id="node-inconsistency">
+                                    <div class="node-header"><i class="fa-solid fa-magnifying-glass-chart"></i> Inconsistency Detected</div>
+                                    <div class="node-desc">Salary Variance / Undeclared Debt</div>
+                                </div>
+                                <div class="flow-arrow"><i class="fa-solid fa-arrow-down"></i></div>
+                                <div class="node-box" id="node-evidence">
+                                    <div class="node-header"><i class="fa-solid fa-link"></i> Evidence Chain</div>
+                                    <div class="node-desc">Line-Item Discrepancy Breakdown</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="flow-arrow"><i class="fa-solid fa-arrow-down"></i></div>
+
+                        <div class="node-box final-node" id="node-queue">
+                            <div class="node-header"><i class="fa-solid fa-inbox"></i> Review Queue & Dashboard</div>
+                            <div class="node-desc">Final Underwriter Override & Sign-off</div>
+                        </div>
+
+                    </div>
+                </div>
+            </section>
+
+            <!-- TAB 3: DOCUMENT PROCESSING / UPLOAD -->
+            <section class="tab-content" id="tab-upload">
+                <div class="grid-2col">
+                    <!-- Input Section -->
+                    <div class="card">
+                        <div class="card-header">
+                            <h3><i class="fa-solid fa-cloud-arrow-up"></i> Submit Loan Application</h3>
+                        </div>
+
+                        <!-- Sample Test Presets -->
+                        <div class="preset-selector">
+                            <label><i class="fa-solid fa-flask"></i> Quick Test Preset Scenarios:</label>
+                            <div class="preset-buttons">
+                                <button class="btn btn-preset" onclick="loadSamplePreset(0)">
+                                    <i class="fa-solid fa-check"></i> Clean Approved
+                                </button>
+                                <button class="btn btn-preset" onclick="loadSamplePreset(1)">
+                                    <i class="fa-solid fa-triangle-exclamation"></i> Inflated Salary
+                                </button>
+                                <button class="btn btn-preset" onclick="loadSamplePreset(2)">
+                                    <i class="fa-solid fa-shield-cat"></i> Undeclared EMI
+                                </button>
+                                <button class="btn btn-preset" onclick="loadSamplePreset(3)">
+                                    <i class="fa-solid fa-calendar-xmark"></i> Stale Statement
+                                </button>
+                                <button class="btn btn-preset" onclick="loadSamplePreset(4)">
+                                    <i class="fa-solid fa-file-circle-xmark"></i> Unreadable PDF
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="upload-dropzone" id="dropzone">
+                            <i class="fa-solid fa-file-invoice-dollar drop-icon"></i>
+                            <h4>Drag & Drop Loan Document (JSON / TXT)</h4>
+                            <p>or click to browse files from your machine</p>
+                            <input type="file" id="file-input" accept=".json,.txt,.pdf,.csv">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="json-editor">Raw JSON / Payload Input:</label>
+                            <textarea id="json-editor" class="code-editor" rows="10" placeholder="Paste loan application payload here..."></textarea>
+                        </div>
+
+                        <button class="btn btn-primary btn-block btn-lg" id="btn-process-input">
+                            <i class="fa-solid fa-play"></i> Run Extraction & Audit Engine
+                        </button>
+                    </div>
+
+                    <!-- Live Processing Result Box -->
+                    <div class="card" id="process-result-card">
+                        <div class="card-header">
+                            <h3><i class="fa-solid fa-square-poll-vertical"></i> Audit Execution Output</h3>
+                            <span class="badge" id="result-status-badge">Awaiting Payload</span>
+                        </div>
+
+                        <div class="result-placeholder" id="result-empty">
+                            <i class="fa-solid fa-gears"></i>
+                            <p>Submit a document payload to trigger live extraction, schema validation, metrics calculation, and evidence chain analysis.</p>
+                        </div>
+
+                        <div class="result-detail-container hidden" id="result-detail">
+                            <!-- Dynamic Content -->
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- TAB 4: REVIEW QUEUE -->
+            <section class="tab-content" id="tab-review">
+                <div class="card">
+                    <div class="card-header">
+                        <h3><i class="fa-solid fa-user-check"></i> Flagged Applications Review Queue</h3>
+                        <div class="filter-group">
+                            <select id="filter-status" class="form-select">
+                                <option value="">All Statuses</option>
+                                <option value="FLAGGED">FLAGGED</option>
+                                <option value="MANUAL_REVIEW">MANUAL_REVIEW</option>
+                                <option value="APPROVED">APPROVED</option>
+                                <option value="REJECTED">REJECTED</option>
+                            </select>
+                            <select id="filter-risk" class="form-select">
+                                <option value="">All Risk Levels</option>
+                                <option value="HIGH">HIGH RISK</option>
+                                <option value="MEDIUM">MEDIUM RISK</option>
+                                <option value="LOW">LOW RISK</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="table-responsive">
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th>Application ID</th>
+                                    <th>Applicant Name</th>
+                                    <th>Inconsistencies</th>
+                                    <th>Calculated DTI</th>
+                                    <th>Risk Level</th>
+                                    <th>Status</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="tbody-queue">
+                                <!-- Dynamic rows -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+
+        </main>
+    </div>
+
+    <!-- AUDIT DETAIL MODAL -->
+    <div class="modal-backdrop hidden" id="audit-modal">
+        <div class="modal-card">
+            <div class="modal-header">
+                <div>
+                    <h2 id="modal-app-title">Application Audit Details</h2>
+                    <span class="badge" id="modal-app-status">FLAGGED</span>
+                </div>
+                <button class="modal-close" onclick="closeAuditModal()">&times;</button>
+            </div>
+
+            <div class="modal-body" id="modal-app-body">
+                <!-- Dynamic Evidence Chain & Metrics -->
+            </div>
+
+            <div class="modal-footer">
+                <div class="notes-input">
+                    <input type="text" id="modal-notes" placeholder="Enter auditor review notes or override justification...">
+                </div>
+                <div class="modal-actions">
+                    <button class="btn btn-danger" onclick="executeReviewAction('REJECTED')">
+                        <i class="fa-solid fa-xmark"></i> Reject Application
+                    </button>
+                    <button class="btn btn-warning" onclick="executeReviewAction('MANUAL_REVIEW')">
+                        <i class="fa-solid fa-hand"></i> Send to Manual Review
+                    </button>
+                    <button class="btn btn-success" onclick="executeReviewAction('APPROVED')">
+                        <i class="fa-solid fa-check"></i> Approve Application
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="/static/app.js"></script>
+</body>
+</html>

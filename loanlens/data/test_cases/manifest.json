@@ -1,0 +1,225 @@
+[
+  {
+    "test_case_id": "TC001",
+    "applicant_id": "APP-2026-001",
+    "applicant_name": "Alice Walker",
+    "scenario": "Completely Consistent Application",
+    "expected_review_status": "PASS",
+    "expected_inconsistencies": [],
+    "expected_flag_count": 0
+  },
+  {
+    "test_case_id": "TC002",
+    "applicant_id": "APP-2026-002",
+    "applicant_name": "Bob Martinez",
+    "scenario": "Salary Mismatch",
+    "expected_review_status": "FLAGGED",
+    "expected_inconsistencies": [
+      "SALARY_MISMATCH_INFLATED"
+    ],
+    "expected_flag_count": 1
+  },
+  {
+    "test_case_id": "TC003",
+    "applicant_id": "APP-2026-003",
+    "applicant_name": "Charlie Davis",
+    "scenario": "EMI Mismatch",
+    "expected_review_status": "FLAGGED",
+    "expected_inconsistencies": [
+      "UNDECLARED_EXISTING_EMI"
+    ],
+    "expected_flag_count": 1
+  },
+  {
+    "test_case_id": "TC004",
+    "applicant_id": "APP-2026-004",
+    "applicant_name": "Diana Evans",
+    "scenario": "Employment Date Mismatch",
+    "expected_review_status": "FLAGGED",
+    "expected_inconsistencies": [
+      "EMPLOYMENT_DATE_MISMATCH"
+    ],
+    "expected_flag_count": 1
+  },
+  {
+    "test_case_id": "TC005",
+    "applicant_id": "APP-2026-005",
+    "applicant_name": "Ethan Hunt",
+    "scenario": "Multiple Mismatches",
+    "expected_review_status": "FLAGGED",
+    "expected_inconsistencies": [
+      "SALARY_MISMATCH_INFLATED",
+      "UNDECLARED_EXISTING_EMI",
+      "EMPLOYMENT_DATE_MISMATCH",
+      "HIGH_DTI_RATIO"
+    ],
+    "expected_flag_count": 4
+  },
+  {
+    "test_case_id": "TC006",
+    "applicant_id": "APP-2026-006",
+    "applicant_name": "Fiona Gallagher",
+    "scenario": "Missing Salary Information in Bank",
+    "expected_review_status": "FLAGGED",
+    "expected_inconsistencies": [
+      "MISSING_SALARY_CREDITS"
+    ],
+    "expected_flag_count": 1
+  },
+  {
+    "test_case_id": "TC007",
+    "applicant_id": "APP-2026-007",
+    "applicant_name": "George Clark",
+    "scenario": "Missing Salary Slip Document",
+    "expected_review_status": "FLAGGED",
+    "expected_inconsistencies": [
+      "MISSING_SALARY_SLIP_DOCUMENT"
+    ],
+    "expected_flag_count": 1
+  },
+  {
+    "test_case_id": "TC008",
+    "applicant_id": "APP-2026-008",
+    "applicant_name": "Hannah Abbott",
+    "scenario": "Low Confidence Extraction Scenario",
+    "expected_review_status": "MANUAL_REVIEW",
+    "expected_inconsistencies": [
+      "EXTRACTION_FAILURE_LOW_CONFIDENCE"
+    ],
+    "expected_flag_count": 1
+  },
+  {
+    "test_case_id": "TC009",
+    "applicant_id": "APP-2026-009",
+    "applicant_name": "Ian Malcolm",
+    "scenario": "Recurring EMI Not Declared in Application",
+    "expected_review_status": "FLAGGED",
+    "expected_inconsistencies": [
+      "UNDECLARED_EXISTING_EMI"
+    ],
+    "expected_flag_count": 1
+  },
+  {
+    "test_case_id": "TC010",
+    "applicant_id": "APP-2026-010",
+    "applicant_name": "Julia Roberts",
+    "scenario": "Small Acceptable Salary Variance",
+    "expected_review_status": "PASS",
+    "expected_inconsistencies": [],
+    "expected_flag_count": 0
+  },
+  {
+    "test_case_id": "TC011",
+    "applicant_id": "APP-2026-011",
+    "applicant_name": "Kevin Bacon",
+    "scenario": "Multiple Liabilities",
+    "expected_review_status": "FLAGGED",
+    "expected_inconsistencies": [
+      "UNDECLARED_EXISTING_EMI"
+    ],
+    "expected_flag_count": 1
+  },
+  {
+    "test_case_id": "TC012",
+    "applicant_id": "APP-2026-012",
+    "applicant_name": "Laura Croft",
+    "scenario": "Salary Mismatch + Undeclared Liability",
+    "expected_review_status": "FLAGGED",
+    "expected_inconsistencies": [
+      "SALARY_MISMATCH_INFLATED",
+      "UNDECLARED_EXISTING_EMI"
+    ],
+    "expected_flag_count": 2
+  },
+  {
+    "test_case_id": "TC013",
+    "applicant_id": "APP-2026-013",
+    "applicant_name": "Michael Scott",
+    "scenario": "Employment Date Mismatch + High DTI Ratio",
+    "expected_review_status": "FLAGGED",
+    "expected_inconsistencies": [
+      "EMPLOYMENT_DATE_MISMATCH",
+      "HIGH_DTI_RATIO"
+    ],
+    "expected_flag_count": 2
+  },
+  {
+    "test_case_id": "TC014",
+    "applicant_id": "APP-2026-014",
+    "applicant_name": "Nancy Wheeler",
+    "scenario": "Missing Tax ID + Salary Mismatch",
+    "expected_review_status": "FLAGGED",
+    "expected_inconsistencies": [
+      "MISSING_TAX_ID",
+      "SALARY_MISMATCH_INFLATED"
+    ],
+    "expected_flag_count": 2
+  },
+  {
+    "test_case_id": "TC015",
+    "applicant_id": "APP-2026-015",
+    "applicant_name": "Oscar Martinez",
+    "scenario": "Low Confidence Extraction + Unrecognized Format",
+    "expected_review_status": "MANUAL_REVIEW",
+    "expected_inconsistencies": [
+      "EXTRACTION_FAILURE_LOW_CONFIDENCE"
+    ],
+    "expected_flag_count": 1
+  },
+  {
+    "test_case_id": "TC016",
+    "applicant_id": "APP-2026-016",
+    "applicant_name": "Peter Parker",
+    "scenario": "Excessive Debt-to-Income (DTI > 75%)",
+    "expected_review_status": "FLAGGED",
+    "expected_inconsistencies": [
+      "HIGH_DTI_RATIO"
+    ],
+    "expected_flag_count": 1
+  },
+  {
+    "test_case_id": "TC017",
+    "applicant_id": "APP-2026-017",
+    "applicant_name": "Quinn Fabray",
+    "scenario": "Outdated Pay Period (Payslip > 90 Days)",
+    "expected_review_status": "FLAGGED",
+    "expected_inconsistencies": [
+      "OUTDATED_PAYSLIP_PERIOD"
+    ],
+    "expected_flag_count": 1
+  },
+  {
+    "test_case_id": "TC018",
+    "applicant_id": "APP-2026-018",
+    "applicant_name": "Rachel Berry",
+    "scenario": "Zero Stated Income",
+    "expected_review_status": "FLAGGED",
+    "expected_inconsistencies": [
+      "INVALID_STATED_INCOME"
+    ],
+    "expected_flag_count": 1
+  },
+  {
+    "test_case_id": "TC019",
+    "applicant_id": "APP-2026-019",
+    "applicant_name": "Steve Harrington",
+    "scenario": "Incomplete Bank Statement History (1 Month)",
+    "expected_review_status": "FLAGGED",
+    "expected_inconsistencies": [
+      "INCOMPLETE_STATEMENT_HISTORY"
+    ],
+    "expected_flag_count": 1
+  },
+  {
+    "test_case_id": "TC020",
+    "applicant_id": "APP-2026-020",
+    "applicant_name": "Tony Stark",
+    "scenario": "Complex Profile (Multiple Liabilities + Undeclared EMI + Salary Variance)",
+    "expected_review_status": "FLAGGED",
+    "expected_inconsistencies": [
+      "SALARY_MISMATCH_INFLATED",
+      "UNDECLARED_EXISTING_EMI"
+    ],
+    "expected_flag_count": 2
+  }
+]

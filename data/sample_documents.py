@@ -1,0 +1,82 @@
+SAMPLE_LOAN_BATCH = [
+    {
+        "applicant_id": "APP-2026-001",
+        "applicant_name": "Sarah Connor",
+        "tax_id": "PAN-SCON8892A",
+        "stated_monthly_income": 9500.0,
+        "claimed_existing_emi": 850.0,
+        "requested_loan_amount": 150000.0,
+        "proposed_monthly_emi": 2100.0,
+        "salary_credits_3m": [9500.0, 9500.0, 9600.0],
+        "existing_emi_debits_3m": [850.0, 850.0, 850.0],
+        "recurring_debits_3m": [1200.0, 1150.0, 1300.0],
+        "application_date": "2026-09-15",
+        "statement_end_date": "2026-09-10",
+        "payslip_date": "2026-09-01",
+        "notes": "Standard auto-approved profile with low DTI (31.0%)."
+    },
+    {
+        "applicant_id": "APP-2026-002",
+        "applicant_name": "Marcus Wright",
+        "tax_id": "SSN-489-00-1192",
+        "stated_monthly_income": 14000.0,
+        "claimed_existing_emi": 1200.0,
+        "requested_loan_amount": 350000.0,
+        "proposed_monthly_emi": 4800.0,
+        "salary_credits_3m": [7800.0, 8000.0, 7900.0],
+        "existing_emi_debits_3m": [1200.0, 1200.0, 1200.0],
+        "recurring_debits_3m": [1500.0, 1600.0, 1400.0],
+        "application_date": "2026-09-17",
+        "statement_end_date": "2026-09-12",
+        "notes": "Flagged: Stated salary ($14,000) is 77% higher than bank credits (~$7,900)."
+    },
+    {
+        "applicant_id": "APP-2026-003",
+        "applicant_name": "David Reese",
+        "tax_id": "PAN-DREES9014K",
+        "stated_monthly_income": 6000.0,
+        "claimed_existing_emi": 400.0,
+        "requested_loan_amount": 180000.0,
+        "proposed_monthly_emi": 2600.0,
+        "salary_credits_3m": [6000.0, 6000.0, 5900.0],
+        "existing_emi_debits_3m": [2200.0, 2200.0, 2200.0],
+        "recurring_debits_3m": [1800.0, 1900.0, 1750.0],
+        "application_date": "2026-09-14",
+        "statement_end_date": "2026-09-08",
+        "notes": "Flagged: Hidden existing EMIs ($2,200 detected vs $400 claimed) pushing DTI to 80.4%."
+    },
+    {
+        "applicant_id": "APP-2026-004",
+        "applicant_name": "Elena Rostova",
+        "tax_id": "SSN-998-12-8840",
+        "stated_monthly_income": 8200.0,
+        "claimed_existing_emi": 900.0,
+        "requested_loan_amount": 120000.0,
+        "proposed_monthly_emi": 1600.0,
+        "salary_credits_3m": [8200.0, 8200.0, 8200.0],
+        "existing_emi_debits_3m": [900.0, 900.0, 900.0],
+        "recurring_debits_3m": [1100.0, 1200.0, 1150.0],
+        "application_date": "2026-09-16",
+        "statement_end_date": "2026-04-10",
+        "notes": "Flagged: Outdated bank statement (159 days old)."
+    },
+    {
+        "applicant_id": "APP-2026-005",
+        "applicant_name": "Unreadable File #8819",
+        "corrupted": True,
+        "extraction_failed": True,
+        "failure_reason": "OCR error: Scanned image resolution too low (< 150 DPI), illegible text stream.",
+        "notes": "Extraction failure -> Routed directly to Manual Review Queue."
+    },
+    {
+        "applicant_id": "APP-2026-006",
+        "applicant_name": "Unknown Applicant",
+        "tax_id": None,
+        "stated_monthly_income": 0.0,
+        "claimed_existing_emi": 0.0,
+        "requested_loan_amount": 50000.0,
+        "proposed_monthly_emi": 800.0,
+        "salary_credits_3m": [],
+        "notes": "Schema failure: Missing applicant name, Tax ID, and bank salary credits."
+    }
+]

@@ -414,5 +414,54 @@
       }, 3800);
     })();
   </script>
+
+  <!-- Live API Submission -->
+  <script>
+    const API = 'http://127.0.0.1:8000';
+
+    // Auto-run a live verification using sample data on page load
+    async function runLiveVerification(payload) {
+      try {
+        const res = await fetch(`${API}/api/process`, {
+          method: 'POST',
+          headers: {'Content-Type': 'application/json'},
+          body: JSON.stringify(payload)
+        });
+        if (res.ok) {
+          const record = await res.json();
+          // Redirect to the audit page with the new record ID
+          setTimeout(() => {
+            window.location.href = `audit-and-inspection.html?id=${record.application_id}`;
+          }, 2000);
+          return record;
+        }
+      } catch(e) {
+        console.warn('Live verification call failed:', e.message);
+      }
+    }
+
+    // Process from URL param (when coming from document-intake) or run a demo sample
+    const urlParams = new URLSearchParams(window.location.search);
+    const demoMode = urlParams.get('demo');
+
+    if (demoMode === 'true' || !urlParams.get('id')) {
+      // Run a synthetic demo application through the engine
+      const samplePayload = {
+        applicant_id: `APP-LIVE-${Date.now().toString().slice(-6)}`,
+        applicant_name: "Demo Applicant",
+        stated_monthly_income: 8500,
+        claimed_existing_emi: 200,
+        requested_loan_amount: 150000,
+        proposed_monthly_emi: 3200,
+        salary_credits_3m: [6000, 6200, 5900],
+        existing_emi_debits_3m: [850, 850, 850],
+        recurring_debits_3m: [1200, 1100, 1300],
+        application_date: new Date().toISOString().split('T')[0],
+        statement_end_date: new Date(Date.now() - 30*24*3600*1000).toISOString().split('T')[0]
+      };
+      // Small delay to let the animation run first
+      setTimeout(() => runLiveVerification(samplePayload), 3000);
+    }
+  </script>
 </body>
 </html>

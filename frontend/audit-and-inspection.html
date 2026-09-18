@@ -236,6 +236,10 @@
 
     </div>
 
+    <!-- LIVE API EVIDENCE CARDS (injected by JS when ?id= is present) -->
+    <div id="live-evidence-section" class="bg-white rounded-xl border border-slate-200 shadow-xs overflow-hidden flex flex-col divide-y divide-slate-100" style="display:none">
+    </div>
+
     <!-- STRUCTURED INSPECTION MATRIX TABLE -->
     <div class="bg-white rounded-xl border border-slate-200 shadow-xs overflow-hidden flex flex-col">
       
@@ -625,41 +629,156 @@
     </div>
   </aside>
 
-  <!-- MICRO-INTERACTIONS SCRIPT -->
+  <!-- MICRO-INTERACTIONS + LIVE API SCRIPT -->
   <script>
+    const API = 'http://127.0.0.1:8000';
+
     function toggleEvidence(id) {
       const drawer = document.getElementById('evidence-drawer-' + id);
-      if (drawer) {
-        drawer.classList.toggle('hidden');
-      }
+      if (drawer) drawer.classList.toggle('hidden');
     }
 
     function filterAuditRows(category, activeBtn) {
-      // Update Button Styles
       document.querySelectorAll('.audit-filter-btn').forEach(btn => {
         btn.className = 'audit-filter-btn px-3 py-1.5 rounded-lg bg-white border border-slate-200 text-slate-700 hover:bg-slate-100 text-xs font-medium whitespace-nowrap transition-all';
       });
       activeBtn.className = 'audit-filter-btn px-3 py-1.5 rounded-lg bg-slate-900 text-white text-xs font-semibold shadow-xs whitespace-nowrap transition-all';
-
-      // Show / Hide rows
       const rows = document.querySelectorAll('.audit-row');
       rows.forEach(row => {
-        if (category === 'ALL' || row.getAttribute('data-category') === category) {
-          row.style.display = '';
-        } else {
-          row.style.display = 'none';
-        }
+        row.style.display = (category === 'ALL' || row.getAttribute('data-category') === category) ? '' : 'none';
       });
     }
 
     function searchAuditFields() {
       const query = document.getElementById('audit-search-input').value.toLowerCase();
-      const rows = document.querySelectorAll('.audit-row');
-      rows.forEach(row => {
-        const text = row.innerText.toLowerCase();
-        row.style.display = text.includes(query) ? '' : 'none';
+      document.querySelectorAll('.audit-row').forEach(row => {
+        row.style.display = row.innerText.toLowerCase().includes(query) ? '' : 'none';
       });
     }
+
+    function severityBadge(sev) {
+      const c = sev === 'HIGH' ? 'rose' : sev === 'MEDIUM' ? 'amber' : 'slate';
+      return `<span class="px-2 py-0.5 rounded font-mono text-[10px] font-bold bg-${c}-100 text-${c}-700 border border-${c}-200 uppercase">${sev}</span>`;
+    }
+
+    function injectLiveData(app) {
+      // Breadcrumb
+      document.querySelectorAll('span.font-bold.text-slate-900').forEach(el => {
+        if (el.textContent.includes('#APP-')) el.textContent = app.application_id;
+      });
+      document.querySelectorAll('span.text-sky-700').forEach(el => {
+        if (el.textContent.includes('Vance') || el.textContent.includes('Arthur')) el.textContent = app.applicant_name;
+      });
+
+      // Applicant header
+      const nameEls = document.querySelectorAll('h2');
+      nameEls.forEach(el => { if (el.textContent.includes('Arthur') || el.textContent.includes('Vance')) el.textContent = app.applicant_name; });
+
+      // Initials avatar
+      const initials = app.applicant_name.split(' ').map(w=>w[0]).join('').slice(0,2).toUpperCase();
+      document.querySelectorAll('.w-11.h-11.rounded-xl').forEach(el => { el.textContent = initials; });
+
+      // Metrics from calculated_metrics
+      const m = app.calculated_metrics;
+      const incs = app.inconsistencies || [];
+
+      // Counter badges
+      const matched = incs.length === 0 ? 1 : 0;
+      const mismatches = incs.filter(i => i.severity === 'HIGH').length;
+      const needsReview = incs.filter(i => i.severity === 'MEDIUM').length;
+      const badgeContainer = document.querySelector('.flex.flex-wrap.items-center.gap-2');
+      if (badgeContainer) {
+        badgeContainer.innerHTML = `
+          <div class="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-emerald-50 text-emerald-800 border border-emerald-200 text-xs font-semibold">
+            <span class="w-2 h-2 rounded-full bg-emerald-500"></span>
+            <span class="font-mono font-bold">${incs.length === 0 ? '✓' : '—'}</span>
+            <span>${incs.length === 0 ? 'All Matched' : 'Some Matched'}</span>
+          </div>
+          ${mismatches > 0 ? `<div class="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-rose-50 text-rose-800 border border-rose-200 text-xs font-semibold">
+            <span class="w-2 h-2 rounded-full bg-rose-500 animate-pulse"></span>
+            <span class="font-mono font-bold">${mismatches}</span>
+            <span>High Risk</span>
+          </div>` : ''}
+          ${needsReview > 0 ? `<div class="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-amber-50 text-amber-800 border border-amber-200 text-xs font-semibold">
+            <span class="w-2 h-2 rounded-full bg-amber-500"></span>
+            <span class="font-mono font-bold">${needsReview}</span>
+            <span>Needs Review</span>
+          </div>` : ''}
+          <div class="flex items-center gap-1.5 px-3 py-1.5 rounded-lg ${app.status === 'APPROVED' ? 'bg-emerald-100 text-emerald-800 border-emerald-200' : 'bg-rose-100 text-rose-800 border-rose-200'} border text-xs font-semibold">
+            <span class="font-mono font-bold">${app.status}</span>
+          </div>`;
+      }
+
+      // Inject inconsistency evidence table if container exists
+      const evidenceSection = document.getElementById('live-evidence-section');
+      if (evidenceSection) {
+        evidenceSection.style.display = 'flex';
+        if (incs.length === 0) {
+          evidenceSection.innerHTML = `<div class="p-6 text-center text-emerald-700 font-semibold text-sm">✓ No inconsistencies detected — all checks passed.</div>`;
+        } else {
+          evidenceSection.innerHTML = incs.map((inc, i) => `
+            <div class="audit-row border-b border-slate-100 last:border-0 p-4" data-category="${inc.severity}">
+              <div class="flex items-start justify-between gap-4">
+                <div class="flex items-start gap-3">
+                  <div class="w-7 h-7 rounded-lg ${inc.severity === 'HIGH' ? 'bg-rose-100 text-rose-700' : 'bg-amber-100 text-amber-700'} flex items-center justify-center flex-shrink-0 mt-0.5">
+                    <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd"/></svg>
+                  </div>
+                  <div class="flex-1">
+                    <div class="flex items-center gap-2 flex-wrap">
+                      <span class="font-semibold text-slate-900 text-sm">${inc.title}</span>
+                      ${severityBadge(inc.severity)}
+                      <span class="font-mono text-[10px] text-slate-400 bg-slate-100 px-1.5 py-0.5 rounded border border-slate-200">${inc.code}</span>
+                    </div>
+                    <p class="text-xs text-slate-600 mt-1">${inc.description}</p>
+                    <div class="mt-2 grid grid-cols-2 gap-2 text-xs">
+                      <div class="bg-emerald-50 p-2 rounded-lg border border-emerald-100">
+                        <span class="font-mono text-[10px] text-emerald-600 uppercase font-semibold block">Expected</span>
+                        <span class="font-mono text-slate-800 font-medium">${inc.expected_value}</span>
+                      </div>
+                      <div class="bg-rose-50 p-2 rounded-lg border border-rose-100">
+                        <span class="font-mono text-[10px] text-rose-600 uppercase font-semibold block">Actual</span>
+                        <span class="font-mono text-slate-800 font-medium">${inc.actual_value}</span>
+                      </div>
+                    </div>
+                    <div class="mt-1.5 text-[11px] font-mono text-slate-500">Source: ${inc.source_document}</div>
+                  </div>
+                </div>
+                ${inc.discrepancy_variance_pct != null ? `<span class="font-mono font-bold text-rose-600 text-sm whitespace-nowrap">${inc.discrepancy_variance_pct.toFixed(1)}%</span>` : ''}
+              </div>
+            </div>
+          `).join('');
+        }
+      }
+
+      // Wire up sign-off / approve button
+      document.querySelectorAll('button').forEach(btn => {
+        if (btn.textContent.includes('Sign Off')) {
+          btn.onclick = async () => {
+            const notes = prompt('Optional reviewer notes:') || '';
+            const res = await fetch(`${API}/api/applications/${app.application_id}/review`, {
+              method: 'POST', headers: {'Content-Type':'application/json'},
+              body: JSON.stringify({action: 'APPROVED', reviewer_notes: notes})
+            });
+            if (res.ok) { alert('Application marked as Reviewed / Approved.'); window.location.href = 'dashboard.html'; }
+          };
+        }
+      });
+    }
+
+    async function loadAuditPage() {
+      const urlParams = new URLSearchParams(window.location.search);
+      const appId = urlParams.get('id');
+      if (!appId) return; // no id = show static page as-is
+
+      try {
+        const app = await fetch(`${API}/api/applications/${encodeURIComponent(appId)}`).then(r => r.json());
+        injectLiveData(app);
+      } catch(e) {
+        console.warn('Could not load live audit data:', e.message);
+      }
+    }
+
+    loadAuditPage();
   </script>
 </body>
 </html>

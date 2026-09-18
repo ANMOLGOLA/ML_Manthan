@@ -1,0 +1,459 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>LoanLens Application</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    body { font-family: 'Inter', sans-serif; background-color: #f8fafc; color: #0f172a; }
+    .hidden { display: none !important; }
+  </style>
+</head>
+<body class="antialiased min-h-screen flex flex-col h-screen overflow-hidden">
+
+  <!-- Top Navigation Bar -->
+  <header class="h-16 bg-white border-b border-slate-200 flex items-center justify-between px-6 shrink-0 z-10">
+    <div class="flex items-center gap-8">
+      <a href="/" class="font-bold text-xl text-slate-900 tracking-tight flex items-center gap-2">
+        <div class="w-8 h-8 bg-indigo-600 rounded-lg flex items-center justify-center text-white">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
+        </div>
+        LoanLens
+      </a>
+      <div id="top-app-id" class="hidden items-center gap-2 px-3 py-1 bg-slate-100 rounded-md border border-slate-200 text-sm font-medium text-slate-700">
+        <span class="w-2 h-2 rounded-full bg-emerald-500"></span>
+        <span id="header-app-text">Application: Pending</span>
+      </div>
+    </div>
+    
+    <div class="flex items-center gap-4">
+      <div class="relative hidden md:block">
+        <input type="text" placeholder="Search..." class="pl-9 pr-4 py-1.5 bg-slate-100 border-transparent rounded-lg text-sm focus:border-indigo-500 focus:bg-white focus:ring-0 transition-colors w-64">
+        <svg class="w-4 h-4 text-slate-400 absolute left-3 top-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
+      </div>
+      <div class="w-8 h-8 bg-slate-200 rounded-full border border-slate-300"></div>
+    </div>
+  </header>
+
+  <div class="flex flex-1 overflow-hidden">
+    
+    <!-- Sidebar -->
+    <aside class="w-64 bg-white border-r border-slate-200 flex flex-col justify-between shrink-0">
+      <nav class="p-4 space-y-1">
+        <a href="#" class="sidebar-link flex items-center gap-3 px-3 py-2 text-sm font-medium rounded-md bg-indigo-50 text-indigo-700" data-target="Overview">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"></path></svg>
+          Overview
+        </a>
+        <a href="#" class="sidebar-link flex items-center gap-3 px-3 py-2 text-sm font-medium rounded-md text-slate-600 hover:bg-slate-50 hover:text-slate-900" data-target="Documents">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
+          Documents
+        </a>
+        <a href="#" class="sidebar-link flex items-center gap-3 px-3 py-2 text-sm font-medium rounded-md text-slate-600 hover:bg-slate-50 hover:text-slate-900" data-target="Financials">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+          Financial Analysis
+        </a>
+        <a href="#" class="sidebar-link flex items-center gap-3 px-3 py-2 text-sm font-medium rounded-md text-slate-600 hover:bg-slate-50 hover:text-slate-900" data-target="Consistency">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"></path></svg>
+          Consistency Check
+        </a>
+        <a href="#" class="sidebar-link flex items-center gap-3 px-3 py-2 text-sm font-medium rounded-md text-slate-600 hover:bg-slate-50 hover:text-slate-900" data-target="Evidence">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
+          Evidence
+        </a>
+        <a href="#" class="sidebar-link flex items-center gap-3 px-3 py-2 text-sm font-medium rounded-md text-slate-600 hover:bg-slate-50 hover:text-slate-900" data-target="Review">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+          Review Checklist
+        </a>
+      </nav>
+
+      <div class="p-4 border-t border-slate-200">
+        <div class="text-[10px] uppercase font-bold text-slate-400 tracking-wider">PS14 — Loan Document Consistency</div>
+      </div>
+    </aside>
+
+    <!-- Main Content Area -->
+    <main class="flex-1 overflow-y-auto bg-slate-50 p-8 relative" id="main-content">
+      
+      <!-- VIEW: SETUP & UPLOAD -->
+      <div id="view-setup" class="max-w-5xl mx-auto block">
+        <div class="mb-8">
+          <h1 class="text-3xl font-bold text-slate-900 tracking-tight">New Loan Application</h1>
+          <p class="text-slate-500 mt-1">Upload the documents required for consistency analysis.</p>
+        </div>
+
+        <div class="bg-white p-6 rounded-xl border border-slate-200 shadow-sm mb-8">
+          <h2 class="text-sm font-bold text-slate-900 uppercase tracking-wider mb-4 border-b border-slate-100 pb-2">Application Information</h2>
+          <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+            <div>
+              <label class="block text-xs font-medium text-slate-500 mb-1">Application ID</label>
+              <input type="text" id="setup-app-id" value="APP-AUTO-102" class="w-full bg-slate-50 border border-slate-200 rounded-md px-3 py-1.5 text-sm font-mono text-slate-700" readonly>
+            </div>
+            <div>
+              <label class="block text-xs font-medium text-slate-500 mb-1">Applicant Name</label>
+              <input type="text" id="setup-name" placeholder="Enter Name" class="w-full bg-white border border-slate-300 rounded-md px-3 py-1.5 text-sm text-slate-900 focus:ring-1 focus:ring-indigo-500">
+            </div>
+            <div>
+              <label class="block text-xs font-medium text-slate-500 mb-1">Requested Loan Amount</label>
+              <input type="text" id="setup-loan" placeholder="$" class="w-full bg-white border border-slate-300 rounded-md px-3 py-1.5 text-sm text-slate-900 focus:ring-1 focus:ring-indigo-500">
+            </div>
+            <div>
+              <label class="block text-xs font-medium text-slate-500 mb-1">Application Date</label>
+              <input type="date" id="setup-date" class="w-full bg-white border border-slate-300 rounded-md px-3 py-1.5 text-sm text-slate-900 focus:ring-1 focus:ring-indigo-500">
+            </div>
+          </div>
+        </div>
+
+        <div class="mb-4">
+          <h2 class="text-sm font-bold text-slate-900 uppercase tracking-wider mb-4">Required Documents</h2>
+          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+            <!-- Doc 1 -->
+            <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm flex flex-col justify-between h-40 group cursor-pointer hover:border-indigo-400 transition" onclick="document.getElementById('file-app').click()">
+              <div>
+                <div class="font-semibold text-slate-900 text-sm">Loan Application</div>
+                <div class="text-xs text-slate-500 mt-1">Drag & drop or Browse</div>
+              </div>
+              <div class="text-xs font-medium text-indigo-600 mt-4 flex items-center gap-1 hidden" id="status-app">
+                <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+                <span id="name-app" class="truncate"></span>
+              </div>
+              <input type="file" id="file-app" class="hidden" accept=".pdf,.png,.jpg" onchange="fileSelected('app', this)">
+            </div>
+            <!-- Doc 2 -->
+            <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm flex flex-col justify-between h-40 group cursor-pointer hover:border-indigo-400 transition" onclick="document.getElementById('file-salary').click()">
+              <div>
+                <div class="font-semibold text-slate-900 text-sm">Salary Slip</div>
+                <div class="text-xs text-slate-500 mt-1">Drag & drop or Browse</div>
+              </div>
+              <div class="text-xs font-medium text-indigo-600 mt-4 flex items-center gap-1 hidden" id="status-salary">
+                <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+                <span id="name-salary" class="truncate"></span>
+              </div>
+              <input type="file" id="file-salary" class="hidden" accept=".pdf,.png,.jpg" onchange="fileSelected('salary', this)">
+            </div>
+            <!-- Doc 3 -->
+            <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm flex flex-col justify-between h-40 group cursor-pointer hover:border-indigo-400 transition" onclick="document.getElementById('file-bank').click()">
+              <div>
+                <div class="font-semibold text-slate-900 text-sm">Bank Statement</div>
+                <div class="text-xs text-slate-500 mt-1">Drag & drop or Browse</div>
+              </div>
+              <div class="text-xs font-medium text-indigo-600 mt-4 flex items-center gap-1 hidden" id="status-bank">
+                <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+                <span id="name-bank" class="truncate"></span>
+              </div>
+              <input type="file" id="file-bank" class="hidden" accept=".pdf,.csv,.json" onchange="fileSelected('bank', this)">
+            </div>
+            <!-- Doc 4 -->
+            <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm flex flex-col justify-between h-40 group cursor-pointer hover:border-indigo-400 transition" onclick="document.getElementById('file-liability').click()">
+              <div>
+                <div class="font-semibold text-slate-900 text-sm">Liability Data</div>
+                <div class="text-xs text-slate-500 mt-1">Drag & drop or Browse</div>
+              </div>
+              <div class="text-xs font-medium text-indigo-600 mt-4 flex items-center gap-1 hidden" id="status-liability">
+                <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+                <span id="name-liability" class="truncate"></span>
+              </div>
+              <input type="file" id="file-liability" class="hidden" accept=".pdf,.png,.jpg,.json" onchange="fileSelected('liability', this)">
+            </div>
+          </div>
+        </div>
+
+        <div class="mt-8 flex justify-end border-t border-slate-200 pt-6">
+          <button id="btn-analyze" class="px-8 py-3 bg-slate-900 hover:bg-slate-800 text-white rounded-lg font-semibold transition shadow-sm disabled:opacity-50 disabled:cursor-not-allowed" onclick="startAnalysis()">
+            Analyze Application
+          </button>
+        </div>
+      </div>
+
+      <!-- VIEW: PROCESSING -->
+      <div id="view-processing" class="max-w-2xl mx-auto mt-20 hidden">
+        <div class="text-center mb-10">
+          <div class="w-16 h-16 bg-indigo-100 rounded-full flex items-center justify-center mx-auto mb-6">
+            <svg class="w-8 h-8 text-indigo-600 animate-spin" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path></svg>
+          </div>
+          <h1 class="text-3xl font-bold text-slate-900 tracking-tight">Analyzing Application</h1>
+          <p class="text-slate-500 mt-2">Running document ingestion and consistency engine.</p>
+        </div>
+
+        <div class="bg-white rounded-xl border border-slate-200 p-6 shadow-sm space-y-4 font-mono text-sm" id="process-steps">
+          <div class="flex items-center gap-3 text-slate-800" id="step-1">
+            <svg class="w-5 h-5 text-emerald-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+            Documents received
+          </div>
+          <div class="flex items-center gap-3 text-slate-400" id="step-2">
+            <div class="w-5 h-5 rounded-full border-2 border-slate-200 flex-shrink-0"></div>
+            Extracting information & running OCR...
+          </div>
+          <div class="flex items-center gap-3 text-slate-400" id="step-3">
+            <div class="w-5 h-5 rounded-full border-2 border-slate-200 flex-shrink-0"></div>
+            Normalizing data and calculating financial metrics...
+          </div>
+          <div class="flex items-center gap-3 text-slate-400" id="step-4">
+            <div class="w-5 h-5 rounded-full border-2 border-slate-200 flex-shrink-0"></div>
+            Running deterministic consistency rules...
+          </div>
+          <div class="flex items-center gap-3 text-slate-400" id="step-5">
+            <div class="w-5 h-5 rounded-full border-2 border-slate-200 flex-shrink-0"></div>
+            Preparing review dashboard...
+          </div>
+        </div>
+      </div>
+
+      <!-- VIEW: DASHBOARD (ANALYSIS) -->
+      <div id="view-dashboard" class="max-w-6xl mx-auto hidden pb-20">
+        
+        <!-- Header -->
+        <div class="flex justify-between items-end mb-8 border-b border-slate-200 pb-6">
+          <div>
+            <div class="text-sm font-bold text-slate-400 tracking-wider uppercase mb-1">Consistency Report</div>
+            <h1 class="text-3xl font-bold text-slate-900 tracking-tight" id="dash-name">Applicant Name</h1>
+            <div class="flex items-center gap-2 mt-2 font-mono text-sm">
+              <span class="px-2 py-0.5 bg-slate-100 border border-slate-200 rounded text-slate-700" id="dash-id">APP-000</span>
+              <span class="text-slate-400">•</span>
+              <span class="text-slate-500" id="dash-date">Date</span>
+            </div>
+          </div>
+          <div class="text-right">
+            <div class="text-sm font-medium text-slate-500 uppercase tracking-wider mb-1">Indicative Loan Amount</div>
+            <div class="text-4xl font-bold text-slate-900" id="dash-indicative-amount">$0</div>
+            <div class="text-xs text-slate-400 mt-1">Model-based estimate for manual review.</div>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+          <!-- Left Column (Inconsistencies & Evidence) -->
+          <div class="lg:col-span-2 space-y-6">
+            
+            <div class="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden">
+              <div class="bg-slate-50 border-b border-slate-200 p-4 flex items-center justify-between">
+                <h2 class="font-bold text-slate-900">Consistency Findings</h2>
+                <span class="px-2.5 py-1 rounded text-xs font-bold" id="dash-status-pill">STATUS</span>
+              </div>
+              <div class="p-0">
+                <ul class="divide-y divide-slate-100" id="dash-inconsistencies">
+                  <!-- JS Injected -->
+                </ul>
+              </div>
+            </div>
+            
+            <div class="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden">
+              <div class="bg-slate-50 border-b border-slate-200 p-4">
+                <h2 class="font-bold text-slate-900">Financial Metrics (Model Extracted)</h2>
+              </div>
+              <div class="p-6 grid grid-cols-2 gap-6">
+                <div>
+                  <div class="text-xs text-slate-500 uppercase font-medium tracking-wider mb-1">Stated Monthly Income</div>
+                  <div class="text-xl font-mono text-slate-900" id="metric-stated-income"></div>
+                </div>
+                <div>
+                  <div class="text-xs text-slate-500 uppercase font-medium tracking-wider mb-1">Calculated Avg Credits</div>
+                  <div class="text-xl font-mono text-slate-900" id="metric-avg-credit"></div>
+                </div>
+                <div>
+                  <div class="text-xs text-slate-500 uppercase font-medium tracking-wider mb-1">Debt-to-Income (DTI)</div>
+                  <div class="text-xl font-mono text-slate-900" id="metric-dti"></div>
+                </div>
+                <div>
+                  <div class="text-xs text-slate-500 uppercase font-medium tracking-wider mb-1">Disposable Income</div>
+                  <div class="text-xl font-mono text-slate-900" id="metric-disposable"></div>
+                </div>
+              </div>
+            </div>
+
+          </div>
+
+          <!-- Right Column (Review Checklist & Action) -->
+          <div class="space-y-6">
+            
+            <div class="bg-indigo-50 border border-indigo-100 rounded-xl p-6">
+              <h3 class="font-bold text-indigo-900 mb-2">Review Checklist</h3>
+              <p class="text-sm text-indigo-700 mb-4">The following items require manual sign-off based on the evidence presented.</p>
+              <ul class="space-y-3 text-sm text-indigo-900" id="review-checklist">
+                <!-- JS Injected -->
+              </ul>
+            </div>
+
+            <div class="bg-white rounded-xl border border-slate-200 p-6 shadow-sm">
+              <h3 class="font-bold text-slate-900 mb-4">Final Review Decision</h3>
+              <p class="text-xs text-slate-500 mb-4">LoanLens provides analytical assistance. Final lending decisions remain subject to human review.</p>
+              
+              <textarea placeholder="Reviewer notes..." class="w-full bg-slate-50 border border-slate-200 rounded-lg p-3 text-sm focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500 mb-4 h-24"></textarea>
+              
+              <div class="flex flex-col gap-2">
+                <button class="w-full py-2.5 bg-emerald-600 hover:bg-emerald-500 text-white rounded-lg font-semibold text-sm transition">Mark as Verified</button>
+                <button class="w-full py-2.5 bg-white border border-slate-300 hover:bg-slate-50 text-slate-700 rounded-lg font-semibold text-sm transition">Request More Info</button>
+                <button class="w-full py-2.5 bg-rose-50 text-rose-700 hover:bg-rose-100 rounded-lg font-semibold text-sm transition">Decline / Reject</button>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+
+    </main>
+  </div>
+
+  <script>
+    // File selection UI logic
+    const filesData = { app: null, salary: null, bank: null, liability: null };
+
+    function fileSelected(type, input) {
+      if (input.files.length > 0) {
+        filesData[type] = input.files[0];
+        document.getElementById(`status-${type}`).classList.remove('hidden');
+        document.getElementById(`name-${type}`).textContent = input.files[0].name;
+      }
+    }
+
+    // Processing Flow
+    async function startAnalysis() {
+      // Find the first available file to upload for the API
+      let fileToUpload = null;
+      for (const key in filesData) {
+        if (filesData[key]) {
+          fileToUpload = filesData[key];
+          break; // The current backend accepts 1 file, we send the first one we find
+        }
+      }
+
+      if (!fileToUpload) {
+        // Fallback dummy payload for demo if no file is uploaded
+        alert("Please upload at least one document to proceed.");
+        return;
+      }
+
+      // Switch view
+      document.getElementById('view-setup').classList.add('hidden');
+      document.getElementById('view-processing').classList.remove('hidden');
+      
+      const formData = new FormData();
+      formData.append('file', fileToUpload);
+      
+      // Inject setup metadata into raw_text as fallback metadata
+      const meta = {
+        applicant_name: document.getElementById('setup-name').value,
+        requested_loan_amount: document.getElementById('setup-loan').value,
+      };
+      formData.append('raw_json', JSON.stringify(meta));
+
+      // Simulate step animations
+      const markDone = (id) => {
+        const el = document.getElementById(id);
+        el.classList.remove('text-slate-400');
+        el.classList.add('text-slate-800');
+        el.innerHTML = `<svg class="w-5 h-5 text-emerald-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>` + el.innerHTML.replace(/<div.*?<\/div>/,'');
+      }
+
+      try {
+        setTimeout(() => markDone('step-2'), 800);
+        
+        // Actually call the API
+        const response = await fetch('/api/upload', {
+          method: 'POST',
+          body: formData
+        });
+
+        setTimeout(() => markDone('step-3'), 1500);
+        setTimeout(() => markDone('step-4'), 2200);
+        setTimeout(() => markDone('step-5'), 2800);
+
+        if (!response.ok) throw new Error("API returned " + response.status);
+        const auditRecord = await response.json();
+
+        // Render Dashboard
+        setTimeout(() => {
+          renderDashboard(auditRecord);
+        }, 3200);
+
+      } catch (err) {
+        console.error(err);
+        alert("Error during processing. See console.");
+      }
+    }
+
+    function renderDashboard(record) {
+      document.getElementById('view-processing').classList.add('hidden');
+      document.getElementById('view-dashboard').classList.remove('hidden');
+      
+      // Top Nav updates
+      document.getElementById('top-app-id').classList.remove('hidden');
+      document.getElementById('top-app-id').classList.add('flex');
+      document.getElementById('header-app-text').textContent = `Application: ${record.application_id}`;
+
+      // Dashboard Header
+      document.getElementById('dash-name').textContent = record.applicant_name;
+      document.getElementById('dash-id').textContent = record.application_id;
+      document.getElementById('dash-date').textContent = record.timestamp;
+
+      // Status Pill
+      const pill = document.getElementById('dash-status-pill');
+      pill.textContent = record.status;
+      if (record.status === 'APPROVED' || record.status === 'LOW_RISK') {
+        pill.className = "px-2.5 py-1 rounded text-xs font-bold bg-emerald-100 text-emerald-800";
+      } else if (record.status === 'FLAGGED') {
+        pill.className = "px-2.5 py-1 rounded text-xs font-bold bg-rose-100 text-rose-800";
+      } else {
+        pill.className = "px-2.5 py-1 rounded text-xs font-bold bg-amber-100 text-amber-800";
+      }
+
+      // INDICATIVE LOAN AMOUNT (Core Product Rule)
+      const reqAmount = record.extracted_data?.requested_loan_amount || 0;
+      document.getElementById('dash-indicative-amount').textContent = "$" + reqAmount.toLocaleString();
+
+      // Financial Metrics
+      const m = record.calculated_metrics || {};
+      const e = record.extracted_data || {};
+      document.getElementById('metric-stated-income').textContent = "$" + (e.stated_monthly_income || 0).toLocaleString();
+      document.getElementById('metric-avg-credit').textContent = "$" + (m.average_monthly_credit || 0).toLocaleString();
+      document.getElementById('metric-dti').textContent = m.dti_ratio ? m.dti_ratio.toFixed(2) + "%" : "N/A";
+      document.getElementById('metric-disposable').textContent = "$" + (m.disposable_income || 0).toLocaleString();
+
+      // Inconsistencies & Evidence
+      const incList = document.getElementById('dash-inconsistencies');
+      incList.innerHTML = '';
+      const checkList = document.getElementById('review-checklist');
+      checkList.innerHTML = '';
+
+      if (record.inconsistencies && record.inconsistencies.length > 0) {
+        record.inconsistencies.forEach(inc => {
+          // Render to list
+          const li = document.createElement('li');
+          li.className = "p-5";
+          li.innerHTML = `
+            <div class="flex items-start gap-4">
+              <div class="mt-0.5 w-6 h-6 rounded-full bg-rose-100 text-rose-600 flex items-center justify-center flex-shrink-0">
+                <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path></svg>
+              </div>
+              <div class="flex-1">
+                <h4 class="font-bold text-slate-900">${inc.title}</h4>
+                <p class="text-sm text-slate-600 mt-1">${inc.description}</p>
+                <div class="mt-3 bg-slate-50 border border-slate-200 rounded p-3 font-mono text-xs text-slate-700">
+                  <div class="grid grid-cols-2 gap-2">
+                    <div><span class="text-slate-400 block mb-0.5">Expected:</span> <span class="font-bold">${inc.expected_value}</span></div>
+                    <div><span class="text-slate-400 block mb-0.5">Actual Evidence:</span> <span class="font-bold text-rose-600">${inc.actual_value}</span></div>
+                  </div>
+                  <div class="mt-2 text-slate-400">Source: ${inc.source_document}</div>
+                </div>
+              </div>
+            </div>
+          `;
+          incList.appendChild(li);
+
+          // Add to Checklist
+          const checkItem = document.createElement('li');
+          checkItem.className = "flex items-start gap-2";
+          checkItem.innerHTML = `
+            <input type="checkbox" class="mt-1 rounded border-indigo-300 text-indigo-600 focus:ring-indigo-500">
+            <span>Review ${inc.field} discrepancy against source documents.</span>
+          `;
+          checkList.appendChild(checkItem);
+        });
+      } else {
+        incList.innerHTML = `<li class="p-8 text-center text-slate-500">No inconsistencies detected by the AI. Clear for review.</li>`;
+        checkList.innerHTML = `<li class="text-slate-500">No specific discrepancies to review. Perform standard final check.</li>`;
+      }
+    }
+  </script>
+</body>
+</html>

@@ -9,6 +9,7 @@ from pydantic import BaseModel
 
 from engine.audit import AuditPipeline
 from engine.schema import AuditRecord, ReviewStatus, RiskLevel
+from engine.ocr_engine import OCREngine
 from data.sample_documents import SAMPLE_LOAN_BATCH
 
 app = FastAPI(title="Loan Document Processing & Risk Audit Engine")
@@ -76,6 +77,8 @@ async def upload_document(
             filename = file.filename.lower()
             if filename.endswith(".json"):
                 payload = json.loads(content_bytes.decode("utf-8"))
+            elif filename.endswith((".pdf", ".png", ".jpg", ".jpeg")):
+                payload = OCREngine.extract_text(content_bytes, filename)
             else:
                 payload = content_bytes.decode("utf-8", errors="ignore")
         elif raw_json:
@@ -157,9 +160,17 @@ os.makedirs("static", exist_ok=True)
 app.mount("/static", StaticFiles(directory="static"), name="static")
 
 @app.get("/", response_class=HTMLResponse)
-def serve_dashboard():
-    with open("static/index.html", "r", encoding="utf-8") as f:
+def serve_index():
+    with open("frontend/index.html", "r", encoding="utf-8") as f:
         return f.read()
+
+@app.get("/app", response_class=HTMLResponse)
+def serve_app():
+    with open("frontend/app.html", "r", encoding="utf-8") as f:
+        return f.read()
+
+# Serve remaining HTML files from frontend directory
+app.mount("/", StaticFiles(directory="frontend", html=True), name="frontend")
 
 if __name__ == "__main__":
     import uvicorn

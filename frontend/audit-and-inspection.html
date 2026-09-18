@@ -1,0 +1,665 @@
+<!DOCTYPE html>
+<html lang="en" class="h-full bg-slate-50">
+<head>
+  <meta charset="utf-8"/>
+  <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+  <title>DocCheck — Verification Results & Audit Inspection</title>
+  
+  <!-- Fonts: Inter & JetBrains Mono -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com?plugins=forms"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Inter', '-apple-system', 'BlinkMacSystemFont', 'sans-serif'],
+            mono: ['JetBrains Mono', 'monospace'],
+          }
+        }
+      }
+    };
+  </script>
+  
+  <style>
+    body {
+      font-feature-settings: "cv02", "cv03", "cv04", "cv11";
+      -webkit-font-smoothing: antialiased;
+    }
+    .custom-scrollbar::-webkit-scrollbar {
+      width: 5px;
+      height: 5px;
+    }
+    .custom-scrollbar::-webkit-scrollbar-track {
+      background: transparent;
+    }
+    .custom-scrollbar::-webkit-scrollbar-thumb {
+      background: #CBD5E1;
+      border-radius: 4px;
+    }
+  </style>
+</head>
+<body class="h-full bg-slate-50 text-slate-800 font-sans flex flex-col antialiased selection:bg-sky-500/20">
+
+  <!-- TOP GLOBAL NAVIGATION BAR -->
+  <header class="sticky top-0 z-50 bg-white border-b border-slate-200 shadow-xs flex-shrink-0">
+    <div class="max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-8 h-14 flex items-center justify-between gap-4">
+      
+      <!-- Brand & Telemetry -->
+      <div class="flex items-center gap-6">
+        <a href="dashboard.html" class="flex items-center gap-2.5 group">
+          <div class="w-8 h-8 rounded-lg bg-slate-900 flex items-center justify-center text-white shadow-xs group-hover:bg-slate-800 transition-colors">
+            <svg class="w-4 h-4 text-sky-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+            </svg>
+          </div>
+          <div class="flex flex-col">
+            <div class="flex items-center gap-2">
+              <span class="font-bold text-slate-900 tracking-tight text-base leading-none">DocCheck</span>
+              <span class="px-1.5 py-0.5 rounded text-[10px] font-mono font-semibold bg-slate-100 text-slate-600 border border-slate-200">v2.4</span>
+            </div>
+            <span class="text-[11px] text-slate-500 font-medium leading-tight mt-0.5">Credit Underwriting Engine</span>
+          </div>
+        </a>
+
+        <div class="hidden xl:flex items-center gap-2 px-2.5 py-1 bg-slate-100/80 border border-slate-200/80 rounded-md">
+          <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+          <span class="font-mono text-[11px] font-medium text-slate-600">SEC-FIN-09 // PROD NODE</span>
+        </div>
+      </div>
+
+      <!-- Main Navigation Tabs -->
+      <nav class="hidden md:flex items-center gap-1 bg-slate-100 p-1 rounded-lg border border-slate-200/70 text-xs font-medium">
+        <a href="document-intake.html" class="px-3 py-1.5 rounded-md text-slate-600 hover:text-slate-900 transition-colors">Document Intake</a>
+        <a href="dashboard.html" class="px-3 py-1.5 rounded-md text-slate-600 hover:text-slate-900 transition-colors">Verification Queue</a>
+        <a href="live-verification.html" class="px-3 py-1.5 rounded-md text-slate-600 hover:text-slate-900 transition-colors flex items-center gap-1.5">
+          <span>Live Verification</span>
+          <span class="w-1.5 h-1.5 rounded-full bg-sky-500 animate-pulse"></span>
+        </a>
+        <a href="audit-and-inspection.html" class="px-3 py-1.5 rounded-md bg-white text-slate-900 font-semibold shadow-xs">Audit & Inspection</a>
+        <a href="evidence-vault.html" class="px-3 py-1.5 rounded-md text-slate-600 hover:text-slate-900 transition-colors">Evidence Vault</a>
+      </nav>
+
+      <!-- User Profile & Status -->
+      <div class="flex items-center gap-3">
+        <div class="hidden sm:flex flex-col text-right">
+          <span class="text-xs font-semibold text-slate-900">Sarah Jenkins</span>
+          <span class="text-[10px] font-mono text-slate-500">Senior Credit Officer</span>
+        </div>
+        <a href="login.html" title="Switch Account / Sign Out" class="relative group">
+          <img class="w-8 h-8 rounded-full border border-slate-300 object-cover group-hover:ring-2 group-hover:ring-sky-500/50 transition-all" src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=80&auto=format&fit=crop&q=80" alt="Sarah Jenkins">
+          <span class="absolute bottom-0 right-0 w-2.5 h-2.5 rounded-full bg-emerald-500 border-2 border-white"></span>
+        </a>
+      </div>
+
+    </div>
+  </header>
+
+  <!-- MAIN VIEWPORT -->
+  <main class="flex-1 max-w-[1600px] w-full mx-auto px-4 sm:px-6 lg:px-8 py-6 flex flex-col gap-6 pb-20">
+
+    <!-- TOP BREADCRUMB & CONTROLS -->
+    <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
+      <div>
+        <div class="flex items-center gap-2 text-xs font-mono">
+          <a href="dashboard.html" class="text-slate-500 hover:text-slate-800 transition-colors">Verification Queue</a>
+          <span class="text-slate-300">/</span>
+          <span class="font-bold text-slate-900">#APP-2024-8849B</span>
+          <span class="text-slate-300">/</span>
+          <span class="text-sky-700 font-semibold">Arthur Pendelton Vance</span>
+        </div>
+        <div class="flex items-center gap-3 text-xs text-slate-500 mt-1 flex-wrap">
+          <span class="flex items-center gap-1.5 text-emerald-700 font-semibold">
+            <span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
+            Primary KYC Verified
+          </span>
+          <span class="text-slate-300">•</span>
+          <span>LexisNexis & Plaid Synchronized</span>
+          <span class="text-slate-300">•</span>
+          <span class="font-mono text-[11px] text-slate-600">SHA-256: 7f8a9e...e89b</span>
+        </div>
+      </div>
+
+      <!-- Action Buttons -->
+      <div class="flex items-center gap-2.5 flex-wrap">
+        <button type="button" class="px-3 py-1.5 rounded-lg border border-slate-200 bg-white hover:bg-slate-50 text-slate-700 text-xs font-semibold flex items-center gap-1.5 transition-colors shadow-2xs">
+          <svg class="w-3.5 h-3.5 text-slate-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/>
+          </svg>
+          <span>Export Audit Dossier (PDF)</span>
+        </button>
+
+        <button type="button" class="px-3.5 py-1.5 rounded-lg bg-slate-900 hover:bg-slate-800 text-white text-xs font-semibold flex items-center gap-1.5 transition-all shadow-xs group">
+          <svg class="w-3.5 h-3.5 text-sky-400" fill="currentColor" viewBox="0 0 20 20">
+            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
+          </svg>
+          <span>Sign Off as Reviewed</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- APPLICANT SUMMARY & METRIC COUNTERS CARD -->
+    <div class="bg-white rounded-xl border border-slate-200 shadow-xs p-5 flex flex-col xl:flex-row items-start xl:items-center justify-between gap-5">
+      
+      <!-- Profile & Facility -->
+      <div class="flex flex-wrap items-center gap-6">
+        <div class="flex items-center gap-3.5">
+          <div class="w-11 h-11 rounded-xl bg-slate-900 text-white font-bold flex items-center justify-center text-sm tracking-tight shadow-xs">
+            AV
+          </div>
+          <div>
+            <div class="flex items-center gap-2">
+              <h2 class="text-base font-bold text-slate-900">Arthur Pendelton Vance</h2>
+              <span class="font-mono text-[10px] font-semibold bg-slate-100 text-slate-600 px-1.5 py-0.5 rounded border border-slate-200">TAX ID: XXX-XX-9412</span>
+            </div>
+            <p class="text-xs text-slate-500 mt-0.5">Primary Commercial Credit Applicant · Sole Proprietorship</p>
+          </div>
+        </div>
+
+        <div class="hidden sm:flex items-center gap-6 border-l border-slate-200 pl-6">
+          <div>
+            <span class="font-mono text-[10px] uppercase tracking-wider text-slate-400 block font-semibold">Facility Requested</span>
+            <span class="font-bold text-slate-900 text-sm font-mono">$250,000.00 Term Loan</span>
+          </div>
+          <div class="border-l border-slate-200 pl-6">
+            <span class="font-mono text-[10px] uppercase tracking-wider text-slate-400 block font-semibold">Engine Verification</span>
+            <span class="font-mono text-xs text-slate-700 font-medium">Today, 14:32 EST · Engine v2.4</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Diagnostic Counter Badges -->
+      <div class="flex flex-wrap items-center gap-2">
+        <div class="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-emerald-50 text-emerald-800 border border-emerald-200 text-xs font-semibold">
+          <span class="w-2 h-2 rounded-full bg-emerald-500"></span>
+          <span class="font-mono font-bold">5</span>
+          <span>Matched</span>
+        </div>
+
+        <div class="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-rose-50 text-rose-800 border border-rose-200 text-xs font-semibold">
+          <span class="w-2 h-2 rounded-full bg-rose-500 animate-pulse"></span>
+          <span class="font-mono font-bold">2</span>
+          <span>Mismatches</span>
+        </div>
+
+        <div class="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-blue-50 text-blue-800 border border-blue-200 text-xs font-semibold">
+          <span class="w-2 h-2 rounded-full bg-blue-500"></span>
+          <span class="font-mono font-bold">1</span>
+          <span>Needs Review</span>
+        </div>
+
+        <div class="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-slate-100 text-slate-700 border border-slate-200 text-xs font-semibold">
+          <span class="w-2 h-2 rounded-full bg-slate-400"></span>
+          <span class="font-mono font-bold">1</span>
+          <span>Extraction Failed</span>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- FILTER & SEARCH TOOLBAR -->
+    <div class="bg-white rounded-xl border border-slate-200 shadow-xs p-3 flex flex-col md:flex-row items-stretch md:items-center justify-between gap-3">
+      
+      <!-- Instant Search -->
+      <div class="relative flex-1 max-w-md">
+        <svg class="w-4 h-4 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
+        </svg>
+        <input id="audit-search-input" type="text" placeholder="Search field name, source document, or tag..." onkeyup="searchAuditFields()"
+          class="w-full h-8 pl-9 pr-3 text-xs rounded-lg border border-slate-200 bg-slate-50 placeholder:text-slate-400 text-slate-900 focus:bg-white focus:border-slate-800 focus:ring-0">
+      </div>
+
+      <!-- Category Filter Tabs -->
+      <div class="flex items-center gap-1 overflow-x-auto pb-1 md:pb-0 custom-scrollbar" id="audit-filter-group">
+        <button onclick="filterAuditRows('ALL', this)" class="audit-filter-btn px-3 py-1.5 rounded-lg bg-slate-900 text-white text-xs font-semibold shadow-xs whitespace-nowrap transition-all">
+          All (9)
+        </button>
+        <button onclick="filterAuditRows('MISMATCH', this)" class="audit-filter-btn px-3 py-1.5 rounded-lg bg-white border border-slate-200 text-slate-700 hover:bg-slate-100 text-xs font-medium whitespace-nowrap transition-all flex items-center gap-1.5">
+          <span class="w-2 h-2 rounded-full bg-rose-500"></span>
+          <span>Mismatches (2)</span>
+        </button>
+        <button onclick="filterAuditRows('REVIEW', this)" class="audit-filter-btn px-3 py-1.5 rounded-lg bg-white border border-slate-200 text-slate-700 hover:bg-slate-100 text-xs font-medium whitespace-nowrap transition-all">
+          Needs Review (1)
+        </button>
+        <button onclick="filterAuditRows('FAILED', this)" class="audit-filter-btn px-3 py-1.5 rounded-lg bg-white border border-slate-200 text-slate-700 hover:bg-slate-100 text-xs font-medium whitespace-nowrap transition-all">
+          Extraction Failed (1)
+        </button>
+        <button onclick="filterAuditRows('MATCH', this)" class="audit-filter-btn px-3 py-1.5 rounded-lg bg-white border border-slate-200 text-slate-700 hover:bg-slate-100 text-xs font-medium whitespace-nowrap transition-all flex items-center gap-1.5">
+          <span class="w-2 h-2 rounded-full bg-emerald-500"></span>
+          <span>Matched (5)</span>
+        </button>
+      </div>
+
+    </div>
+
+    <!-- STRUCTURED INSPECTION MATRIX TABLE -->
+    <div class="bg-white rounded-xl border border-slate-200 shadow-xs overflow-hidden flex flex-col">
+      
+      <div class="w-full overflow-x-auto custom-scrollbar">
+        <table class="w-full text-left border-collapse min-w-[1020px]" id="audit-matrix-table">
+          <thead>
+            <tr class="bg-slate-50 text-slate-500 font-mono text-[11px] uppercase tracking-wider border-b border-slate-200">
+              <th class="py-3 px-4 font-semibold w-[28%]">Comparison Metric & Field Name</th>
+              <th class="py-3 px-4 font-semibold w-[24%]">Declared Value (Form 1003)</th>
+              <th class="py-3 px-4 font-semibold w-[30%]">Verified Value (Bank / Payslip)</th>
+              <th class="py-3 px-4 font-semibold text-center w-[10%]">Status</th>
+              <th class="py-3 px-4 font-semibold text-right w-[8%]">Action</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-slate-200/70 text-xs font-sans">
+            
+            <!-- ROW 1: MISMATCH -->
+            <tr class="audit-row bg-rose-50/30 hover:bg-rose-50/60 transition-colors" data-category="MISMATCH">
+              <td class="py-3.5 px-4">
+                <div class="flex items-center gap-2.5">
+                  <div class="w-1.5 h-10 rounded-full bg-rose-500 flex-shrink-0"></div>
+                  <div>
+                    <div class="font-bold text-slate-900 text-sm">Annual Salary / Gross Earnings</div>
+                    <div class="font-mono text-[10px] text-slate-500 mt-0.5">UUID: FLD-INC-01 · Confidence: 99.4%</div>
+                  </div>
+                </div>
+              </td>
+              <td class="py-3.5 px-4">
+                <div class="font-mono text-sm font-bold text-slate-900">$100,000.00 <span class="text-xs text-slate-500 font-normal">/ yr</span></div>
+                <div class="text-[11px] text-slate-500 mt-0.5">Stated on Form 1003 (Section 1a)</div>
+              </td>
+              <td class="py-3.5 px-4">
+                <div class="font-mono text-sm font-bold text-rose-600">$50,000.00 / yr <span class="text-xs text-slate-500 font-normal font-sans">(Bank avg: $4,166/mo × 12)</span></div>
+                <div class="text-[11px] text-rose-700 font-semibold mt-0.5 flex items-center gap-1">
+                  <svg class="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd"/></svg>
+                  <span>Bank deposits indicate -50.0% variance vs declared income.</span>
+                </div>
+              </td>
+              <td class="py-3.5 px-4 text-center">
+                <span class="inline-flex items-center px-2 py-0.5 rounded-md bg-rose-100 text-rose-800 font-mono text-[11px] font-bold border border-rose-200">
+                  MISMATCH
+                </span>
+              </td>
+              <td class="py-3.5 px-4 text-right">
+                <button onclick="toggleEvidence('row1')" class="px-2.5 py-1 rounded-lg bg-white border border-slate-200 hover:bg-slate-100 text-sky-700 font-semibold text-xs shadow-2xs transition-all">
+                  Evidence
+                </button>
+              </td>
+            </tr>
+
+            <!-- ROW 1 EVIDENCE DRAWER -->
+            <tr id="evidence-drawer-row1" class="hidden bg-slate-100/80 border-b border-slate-200">
+              <td colspan="5" class="p-4 sm:p-5">
+                <div class="bg-white rounded-xl border border-slate-200 p-4 shadow-sm flex flex-col gap-3">
+                  <div class="flex items-center justify-between pb-2 border-b border-slate-100">
+                    <span class="font-mono text-xs font-bold uppercase text-slate-700 flex items-center gap-2">
+                      <svg class="w-4 h-4 text-sky-600" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/></svg>
+                      Inline Comparative Evidence Excerpt
+                    </span>
+                    <span class="font-mono text-[11px] text-slate-500">Source: Form 1003 Pg 2 vs Chase Statement Pg 4</span>
+                  </div>
+
+                  <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <!-- Excerpt 1 -->
+                    <div class="bg-slate-50 p-3 rounded-lg border border-slate-200 text-xs">
+                      <div class="flex justify-between font-mono text-[10px] text-slate-500 font-semibold mb-1">
+                        <span>FORM 1003 — UNIFORM APPLICATION</span>
+                        <span>PAGE 2 · BOX 1B</span>
+                      </div>
+                      <div class="font-mono font-bold text-slate-900 bg-white p-2 rounded border border-slate-200">
+                        Gross Monthly Base Employment Income: $8,333.33/mo ($100k/yr)
+                      </div>
+                      <div class="font-mono text-[10px] text-slate-400 mt-1">Bounding Box: [210, 480, 520, 510]</div>
+                    </div>
+
+                    <!-- Excerpt 2 -->
+                    <div class="bg-rose-50/50 p-3 rounded-lg border border-rose-200 text-xs">
+                      <div class="flex justify-between font-mono text-[10px] text-rose-700 font-semibold mb-1">
+                        <span>CHASE 12M BANK RECONCILIATION</span>
+                        <span>DIRECT DEPOSITS</span>
+                      </div>
+                      <div class="font-mono font-bold text-rose-700 bg-white p-2 rounded border border-rose-200">
+                        Total Recurring Payroll (12 Mo): $49,992.00 ($4,166.00/mo avg)
+                      </div>
+                      <div class="font-mono text-[10px] text-rose-600 mt-1">Variance: -50.00% shortfall across 12 cycles</div>
+                    </div>
+                  </div>
+                </div>
+              </td>
+            </tr>
+
+            <!-- ROW 2: MISMATCH (DEBT) -->
+            <tr class="audit-row bg-rose-50/30 hover:bg-rose-50/60 transition-colors" data-category="MISMATCH">
+              <td class="py-3.5 px-4">
+                <div class="flex items-center gap-2.5">
+                  <div class="w-1.5 h-10 rounded-full bg-rose-500 flex-shrink-0"></div>
+                  <div>
+                    <div class="font-bold text-slate-900 text-sm">Monthly EMI & Debt Obligations</div>
+                    <div class="font-mono text-[10px] text-slate-500 mt-0.5">UUID: FLD-DBT-04 · Confidence: 98.2%</div>
+                  </div>
+                </div>
+              </td>
+              <td class="py-3.5 px-4">
+                <div class="font-mono text-sm font-bold text-slate-900">$1,200.00 <span class="text-xs text-slate-500 font-normal">/ mo</span></div>
+                <div class="text-[11px] text-slate-500 mt-0.5">Declared Personal Liabilities</div>
+              </td>
+              <td class="py-3.5 px-4">
+                <div class="font-mono text-sm font-bold text-rose-600">$2,650.00 / mo</div>
+                <div class="text-[11px] text-rose-700 font-semibold mt-0.5">
+                  3 recurring loan auto-debits detected in bank CSV on 5th and 18th of month.
+                </div>
+              </td>
+              <td class="py-3.5 px-4 text-center">
+                <span class="inline-flex items-center px-2 py-0.5 rounded-md bg-rose-100 text-rose-800 font-mono text-[11px] font-bold border border-rose-200">
+                  MISMATCH
+                </span>
+              </td>
+              <td class="py-3.5 px-4 text-right">
+                <button class="px-2.5 py-1 rounded-lg bg-white border border-slate-200 hover:bg-slate-100 text-sky-700 font-semibold text-xs shadow-2xs transition-all">
+                  Evidence
+                </button>
+              </td>
+            </tr>
+
+            <!-- ROW 3: EXTRACTION FAILED -->
+            <tr class="audit-row bg-slate-100/60 hover:bg-slate-100 transition-colors" data-category="FAILED">
+              <td class="py-3.5 px-4">
+                <div class="flex items-center gap-2.5">
+                  <div class="w-1.5 h-10 rounded-full bg-slate-400 flex-shrink-0"></div>
+                  <div>
+                    <div class="font-bold text-slate-900 text-sm">Employment Start Date</div>
+                    <div class="font-mono text-[10px] text-slate-500 mt-0.5">UUID: FLD-EMP-03 · OCR Confidence: 14.8%</div>
+                  </div>
+                </div>
+              </td>
+              <td class="py-3.5 px-4">
+                <div class="font-mono text-sm font-bold text-slate-900">March 15, 2019</div>
+                <div class="text-[11px] text-slate-500 mt-0.5">Stated Tenure: 5+ Years</div>
+              </td>
+              <td class="py-3.5 px-4">
+                <div class="font-mono text-xs font-semibold text-slate-500 italic">Unreadable / Missing Stub Tag</div>
+                <div class="text-[11px] text-slate-600 mt-0.5">Payslip date distorted. Requires manual optical verification.</div>
+              </td>
+              <td class="py-3.5 px-4 text-center">
+                <span class="inline-flex items-center px-2 py-0.5 rounded-md bg-slate-200 text-slate-800 font-mono text-[11px] font-bold">
+                  FAILED
+                </span>
+              </td>
+              <td class="py-3.5 px-4 text-right">
+                <a href="document-intake.html" class="px-2.5 py-1 rounded-lg bg-white border border-slate-200 hover:bg-slate-100 text-slate-700 font-semibold text-xs shadow-2xs inline-block">
+                  Upload Alt
+                </a>
+              </td>
+            </tr>
+
+            <!-- ROW 4: NEEDS REVIEW -->
+            <tr class="audit-row bg-blue-50/20 hover:bg-blue-50/40 transition-colors" data-category="REVIEW">
+              <td class="py-3.5 px-4">
+                <div class="flex items-center gap-2.5">
+                  <div class="w-1.5 h-10 rounded-full bg-blue-500 flex-shrink-0"></div>
+                  <div>
+                    <div class="font-bold text-slate-900 text-sm">Primary Employer Name</div>
+                    <div class="font-mono text-[10px] text-slate-500 mt-0.5">UUID: FLD-EMP-01 · Confidence: 91.0%</div>
+                  </div>
+                </div>
+              </td>
+              <td class="py-3.5 px-4">
+                <div class="font-semibold text-slate-900 text-xs">Vance Dynamics Corp</div>
+                <div class="text-[11px] text-slate-500 mt-0.5">Applicant Employer Record</div>
+              </td>
+              <td class="py-3.5 px-4">
+                <div class="font-semibold text-slate-900 text-xs">Vance Dynamics LLC</div>
+                <div class="text-[11px] text-blue-700 font-medium mt-0.5">Fuzzy match (91% confidence). Corporate entity active in Delaware.</div>
+              </td>
+              <td class="py-3.5 px-4 text-center">
+                <span class="inline-flex items-center px-2 py-0.5 rounded-md bg-blue-100 text-blue-800 font-mono text-[11px] font-bold border border-blue-200">
+                  REVIEW
+                </span>
+              </td>
+              <td class="py-3.5 px-4 text-right">
+                <button class="px-2.5 py-1 rounded-lg bg-white border border-slate-200 hover:bg-slate-100 text-sky-700 font-semibold text-xs shadow-2xs">
+                  Evidence
+                </button>
+              </td>
+            </tr>
+
+            <!-- ROW 5: MATCH (NET SALARY) -->
+            <tr class="audit-row hover:bg-slate-50 transition-colors" data-category="MATCH">
+              <td class="py-3.5 px-4">
+                <div class="flex items-center gap-2.5">
+                  <div class="w-1.5 h-10 rounded-full bg-emerald-500 flex-shrink-0"></div>
+                  <div>
+                    <div class="font-bold text-slate-900 text-sm">Monthly Net Salary</div>
+                    <div class="font-mono text-[10px] text-slate-500 mt-0.5">UUID: FLD-INC-02 · Confidence: 99.8%</div>
+                  </div>
+                </div>
+              </td>
+              <td class="py-3.5 px-4">
+                <div class="font-mono text-sm font-bold text-slate-900">$6,140.22 <span class="text-xs text-slate-500 font-normal">/ mo</span></div>
+                <div class="text-[11px] text-slate-500 mt-0.5">Form 1003 Schedule B</div>
+              </td>
+              <td class="py-3.5 px-4">
+                <div class="font-mono text-sm font-bold text-emerald-700">$6,140.22 / mo</div>
+                <div class="text-[11px] text-slate-500 mt-0.5">Exact match against Paychex net pay disbursement line (Stub #91).</div>
+              </td>
+              <td class="py-3.5 px-4 text-center">
+                <span class="inline-flex items-center px-2 py-0.5 rounded-md bg-emerald-100 text-emerald-800 font-mono text-[11px] font-bold border border-emerald-200">
+                  MATCH
+                </span>
+              </td>
+              <td class="py-3.5 px-4 text-right">
+                <button class="px-2.5 py-1 rounded-lg bg-white border border-slate-200 hover:bg-slate-100 text-slate-600 font-semibold text-xs shadow-2xs">
+                  Evidence
+                </button>
+              </td>
+            </tr>
+
+            <!-- ROW 6: MATCH (ACCOUNT) -->
+            <tr class="audit-row hover:bg-slate-50 transition-colors" data-category="MATCH">
+              <td class="py-3.5 px-4">
+                <div class="flex items-center gap-2.5">
+                  <div class="w-1.5 h-10 rounded-full bg-emerald-500 flex-shrink-0"></div>
+                  <div>
+                    <div class="font-bold text-slate-900 text-sm">Bank Account Number (Last 4)</div>
+                    <div class="font-mono text-[10px] text-slate-500 mt-0.5">UUID: FLD-BNK-01 · Confidence: 100.0%</div>
+                  </div>
+                </div>
+              </td>
+              <td class="py-3.5 px-4">
+                <div class="font-mono text-sm font-bold text-slate-900">•••• 8812</div>
+                <div class="text-[11px] text-slate-500 mt-0.5">Disbursement Destination Check</div>
+              </td>
+              <td class="py-3.5 px-4">
+                <div class="font-mono text-sm font-bold text-emerald-700">•••• 8812</div>
+                <div class="text-[11px] text-slate-500 mt-0.5">Chase checking header verified via Plaid API.</div>
+              </td>
+              <td class="py-3.5 px-4 text-center">
+                <span class="inline-flex items-center px-2 py-0.5 rounded-md bg-emerald-100 text-emerald-800 font-mono text-[11px] font-bold border border-emerald-200">
+                  MATCH
+                </span>
+              </td>
+              <td class="py-3.5 px-4 text-right">
+                <button class="px-2.5 py-1 rounded-lg bg-white border border-slate-200 hover:bg-slate-100 text-slate-600 font-semibold text-xs shadow-2xs">
+                  Evidence
+                </button>
+              </td>
+            </tr>
+
+            <!-- ROW 7: MATCH (ADDRESS) -->
+            <tr class="audit-row hover:bg-slate-50 transition-colors" data-category="MATCH">
+              <td class="py-3.5 px-4">
+                <div class="flex items-center gap-2.5">
+                  <div class="w-1.5 h-10 rounded-full bg-emerald-500 flex-shrink-0"></div>
+                  <div>
+                    <div class="font-bold text-slate-900 text-sm">Residential Address</div>
+                    <div class="font-mono text-[10px] text-slate-500 mt-0.5">UUID: FLD-ADR-01 · Confidence: 99.1%</div>
+                  </div>
+                </div>
+              </td>
+              <td class="py-3.5 px-4">
+                <div class="text-xs font-semibold text-slate-900">742 Evergreen Terrace, Springfield, OR</div>
+                <div class="text-[11px] text-slate-500 mt-0.5">Primary Residence (3.2 years)</div>
+              </td>
+              <td class="py-3.5 px-4">
+                <div class="text-xs font-semibold text-emerald-700">742 Evergreen Terrace, Springfield, OR</div>
+                <div class="text-[11px] text-slate-500 mt-0.5">Utility statement & Chase bank header matched.</div>
+              </td>
+              <td class="py-3.5 px-4 text-center">
+                <span class="inline-flex items-center px-2 py-0.5 rounded-md bg-emerald-100 text-emerald-800 font-mono text-[11px] font-bold border border-emerald-200">
+                  MATCH
+                </span>
+              </td>
+              <td class="py-3.5 px-4 text-right">
+                <button class="px-2.5 py-1 rounded-lg bg-white border border-slate-200 hover:bg-slate-100 text-slate-600 font-semibold text-xs shadow-2xs">
+                  Evidence
+                </button>
+              </td>
+            </tr>
+
+            <!-- ROW 8: MATCH (CONTINUITY) -->
+            <tr class="audit-row hover:bg-slate-50 transition-colors" data-category="MATCH">
+              <td class="py-3.5 px-4">
+                <div class="flex items-center gap-2.5">
+                  <div class="w-1.5 h-10 rounded-full bg-emerald-500 flex-shrink-0"></div>
+                  <div>
+                    <div class="font-bold text-slate-900 text-sm">Income Continuity (12 Consecutive Months)</div>
+                    <div class="font-mono text-[10px] text-slate-500 mt-0.5">UUID: FLD-STB-09 · Confidence: 97.5%</div>
+                  </div>
+                </div>
+              </td>
+              <td class="py-3.5 px-4">
+                <div class="font-semibold text-slate-900 text-xs">Continuous</div>
+                <div class="text-[11px] text-slate-500 mt-0.5">No declared gaps or furloughs</div>
+              </td>
+              <td class="py-3.5 px-4">
+                <div class="font-semibold text-emerald-700 text-xs">12 of 12 regular payroll credits observed</div>
+                <div class="text-[11px] text-slate-500 mt-0.5">Bi-weekly intervals verified without interruptions.</div>
+              </td>
+              <td class="py-3.5 px-4 text-center">
+                <span class="inline-flex items-center px-2 py-0.5 rounded-md bg-emerald-100 text-emerald-800 font-mono text-[11px] font-bold border border-emerald-200">
+                  MATCH
+                </span>
+              </td>
+              <td class="py-3.5 px-4 text-right">
+                <button class="px-2.5 py-1 rounded-lg bg-white border border-slate-200 hover:bg-slate-100 text-slate-600 font-semibold text-xs shadow-2xs">
+                  Evidence
+                </button>
+              </td>
+            </tr>
+
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Table Footer Meta -->
+      <div class="p-4 bg-slate-50 border-t border-slate-200 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs font-mono text-slate-500">
+        <div class="flex items-center gap-4">
+          <span>CHECKSUM: 0x8F90C22A</span>
+          <span class="text-slate-300">•</span>
+          <span>COMPLIANCE RECORD: AUD-8849-B2</span>
+        </div>
+        <div class="flex items-center gap-2 text-slate-700 font-semibold">
+          <span class="w-2 h-2 rounded-full bg-emerald-500"></span>
+          <span>SECURE AUDIT IMMUTABILITY ACTIVE</span>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- 3 SECONDARY CONTEXT METRIC CARDS -->
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+      
+      <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-xs flex flex-col gap-2">
+        <span class="font-mono text-[11px] uppercase text-slate-500 font-semibold">Ingestion Pipeline</span>
+        <div class="flex items-center justify-between">
+          <span class="text-sm font-bold text-slate-900">3 Files Parsed</span>
+          <span class="font-mono text-xs font-bold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded border border-emerald-100">100% OCR PASS</span>
+        </div>
+        <div class="h-1.5 w-full bg-slate-100 rounded-full overflow-hidden mt-1">
+          <div class="h-full bg-emerald-500 w-full"></div>
+        </div>
+        <span class="text-xs text-slate-500 mt-0.5">Form 1003, Paychex Stub, 12M Chase CSV.</span>
+      </div>
+
+      <div class="bg-white p-4 rounded-xl border border-rose-200/80 bg-rose-50/20 shadow-xs flex flex-col gap-2">
+        <span class="font-mono text-[11px] uppercase text-rose-600 font-semibold">Discrepancy Impact Level</span>
+        <div class="flex items-center justify-between">
+          <span class="text-sm font-bold text-rose-700">High Underwriting Risk</span>
+          <span class="font-mono text-xs font-bold text-rose-700 bg-rose-100 px-2 py-0.5 rounded border border-rose-200">-50.0% DELTA</span>
+        </div>
+        <div class="h-1.5 w-full bg-rose-100 rounded-full overflow-hidden mt-1">
+          <div class="h-full bg-rose-500 w-3/4"></div>
+        </div>
+        <span class="text-xs text-rose-800 mt-0.5 font-medium">Requires Senior Credit Officer manual sign-off.</span>
+      </div>
+
+      <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-xs flex flex-col gap-2">
+        <span class="font-mono text-[11px] uppercase text-slate-500 font-semibold">Cross-Validation Rule Engine</span>
+        <div class="flex items-center justify-between">
+          <span class="text-sm font-bold text-slate-900">Deterministic Engine</span>
+          <span class="font-mono text-xs font-bold text-slate-700 bg-slate-100 px-2 py-0.5 rounded border border-slate-200">RULE SET 8.2</span>
+        </div>
+        <div class="h-1.5 w-full bg-slate-100 rounded-full overflow-hidden mt-1">
+          <div class="h-full bg-slate-900 w-full"></div>
+        </div>
+        <span class="text-xs text-slate-500 mt-0.5">Zero automated adverse action applied. Comparative output only.</span>
+      </div>
+
+    </div>
+
+  </main>
+
+  <!-- FIXED LEGAL & COMPLIANCE DISCLAIMER ANCHOR -->
+  <aside aria-label="Legal and Compliance Notice" class="fixed bottom-0 left-0 right-0 z-40 bg-slate-900 text-white border-t border-slate-800 py-2.5 px-4 sm:px-6 shadow-2xl">
+    <div class="max-w-[1600px] mx-auto flex flex-col sm:flex-row items-center justify-between gap-3 text-xs font-mono">
+      <div class="flex items-center gap-2">
+        <svg class="w-4 h-4 text-sky-400 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+          <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
+        </svg>
+        <span class="text-slate-300">
+          <strong class="text-sky-400 font-bold">LEGAL & REGULATORY NOTICE:</strong> This tool extracts comparative data points and flags discrepancies only. Final credit adjudication rests exclusively with human underwriters (CFPB §1002).
+        </span>
+      </div>
+      <span class="text-[11px] text-slate-400 bg-slate-800 px-2 py-0.5 rounded border border-slate-700 whitespace-nowrap">
+        FDIC / CFPB AUDIT COMPLIANT
+      </span>
+    </div>
+  </aside>
+
+  <!-- MICRO-INTERACTIONS SCRIPT -->
+  <script>
+    function toggleEvidence(id) {
+      const drawer = document.getElementById('evidence-drawer-' + id);
+      if (drawer) {
+        drawer.classList.toggle('hidden');
+      }
+    }
+
+    function filterAuditRows(category, activeBtn) {
+      // Update Button Styles
+      document.querySelectorAll('.audit-filter-btn').forEach(btn => {
+        btn.className = 'audit-filter-btn px-3 py-1.5 rounded-lg bg-white border border-slate-200 text-slate-700 hover:bg-slate-100 text-xs font-medium whitespace-nowrap transition-all';
+      });
+      activeBtn.className = 'audit-filter-btn px-3 py-1.5 rounded-lg bg-slate-900 text-white text-xs font-semibold shadow-xs whitespace-nowrap transition-all';
+
+      // Show / Hide rows
+      const rows = document.querySelectorAll('.audit-row');
+      rows.forEach(row => {
+        if (category === 'ALL' || row.getAttribute('data-category') === category) {
+          row.style.display = '';
+        } else {
+          row.style.display = 'none';
+        }
+      });
+    }
+
+    function searchAuditFields() {
+      const query = document.getElementById('audit-search-input').value.toLowerCase();
+      const rows = document.querySelectorAll('.audit-row');
+      rows.forEach(row => {
+        const text = row.innerText.toLowerCase();
+        row.style.display = text.includes(query) ? '' : 'none';
+      });
+    }
+  </script>
+</body>
+</html>

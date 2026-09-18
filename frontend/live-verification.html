@@ -1,0 +1,418 @@
+<!DOCTYPE html>
+<html lang="en" class="h-full bg-slate-50">
+<head>
+  <meta charset="utf-8"/>
+  <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+  <title>DocCheck — Live Underwriting Verification</title>
+  
+  <!-- Fonts: Inter & JetBrains Mono -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com?plugins=forms"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Inter', '-apple-system', 'BlinkMacSystemFont', 'sans-serif'],
+            mono: ['JetBrains Mono', 'monospace'],
+          }
+        }
+      }
+    };
+  </script>
+  
+  <style>
+    body {
+      font-feature-settings: "cv02", "cv03", "cv04", "cv11";
+      -webkit-font-smoothing: antialiased;
+    }
+  </style>
+</head>
+<body class="h-full bg-slate-50 text-slate-800 font-sans flex flex-col antialiased selection:bg-sky-500/20">
+
+  <!-- TOP GLOBAL NAVIGATION BAR -->
+  <header class="sticky top-0 z-50 bg-white border-b border-slate-200 shadow-xs flex-shrink-0">
+    <div class="max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-8 h-14 flex items-center justify-between gap-4">
+      
+      <!-- Brand & Telemetry -->
+      <div class="flex items-center gap-6">
+        <a href="dashboard.html" class="flex items-center gap-2.5 group">
+          <div class="w-8 h-8 rounded-lg bg-slate-900 flex items-center justify-center text-white shadow-xs group-hover:bg-slate-800 transition-colors">
+            <svg class="w-4 h-4 text-sky-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+            </svg>
+          </div>
+          <div class="flex flex-col">
+            <div class="flex items-center gap-2">
+              <span class="font-bold text-slate-900 tracking-tight text-base leading-none">DocCheck</span>
+              <span class="px-1.5 py-0.5 rounded text-[10px] font-mono font-semibold bg-slate-100 text-slate-600 border border-slate-200">v2.4</span>
+            </div>
+            <span class="text-[11px] text-slate-500 font-medium leading-tight mt-0.5">Credit Underwriting Engine</span>
+          </div>
+        </a>
+
+        <div class="hidden xl:flex items-center gap-2 px-2.5 py-1 bg-slate-100/80 border border-slate-200/80 rounded-md">
+          <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+          <span class="font-mono text-[11px] font-medium text-slate-600">SEC-FIN-09 // PROD NODE</span>
+        </div>
+      </div>
+
+      <!-- Main Navigation Tabs -->
+      <nav class="hidden md:flex items-center gap-1 bg-slate-100 p-1 rounded-lg border border-slate-200/70 text-xs font-medium">
+        <a href="document-intake.html" class="px-3 py-1.5 rounded-md text-slate-600 hover:text-slate-900 transition-colors">Document Intake</a>
+        <a href="dashboard.html" class="px-3 py-1.5 rounded-md text-slate-600 hover:text-slate-900 transition-colors">Verification Queue</a>
+        <a href="live-verification.html" class="px-3 py-1.5 rounded-md bg-white text-slate-900 font-semibold shadow-xs flex items-center gap-1.5">
+          <span>Live Verification</span>
+          <span class="w-1.5 h-1.5 rounded-full bg-sky-500 animate-pulse"></span>
+        </a>
+        <a href="audit-and-inspection.html" class="px-3 py-1.5 rounded-md text-slate-600 hover:text-slate-900 transition-colors">Audit & Inspection</a>
+        <a href="evidence-vault.html" class="px-3 py-1.5 rounded-md text-slate-600 hover:text-slate-900 transition-colors">Evidence Vault</a>
+      </nav>
+
+      <!-- User Profile & Status -->
+      <div class="flex items-center gap-3">
+        <div class="hidden sm:flex flex-col text-right">
+          <span class="text-xs font-semibold text-slate-900">Sarah Jenkins</span>
+          <span class="text-[10px] font-mono text-slate-500">Senior Credit Officer</span>
+        </div>
+        <a href="index.html" title="Switch Account / Sign Out" class="relative group">
+          <img class="w-8 h-8 rounded-full border border-slate-300 object-cover group-hover:ring-2 group-hover:ring-sky-500/50 transition-all" src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=80&auto=format&fit=crop&q=80" alt="Sarah Jenkins">
+          <span class="absolute bottom-0 right-0 w-2.5 h-2.5 rounded-full bg-emerald-500 border-2 border-white"></span>
+        </a>
+      </div>
+
+    </div>
+  </header>
+
+  <!-- MAIN LAYOUT -->
+  <div class="flex-1 max-w-[1200px] w-full mx-auto px-4 sm:px-6 lg:px-8 py-6 flex flex-col gap-6">
+
+    <!-- Meta Telemetry Header Bar -->
+    <div class="flex flex-wrap items-center justify-between gap-3 bg-white px-4 py-3 rounded-xl border border-slate-200 shadow-xs">
+      <div class="flex items-center gap-2.5 min-w-0 text-xs">
+        <span class="w-2 h-2 rounded-full bg-emerald-500 animate-ping"></span>
+        <span class="font-mono font-semibold uppercase text-slate-600 tracking-wider">Node 04</span>
+        <span class="text-slate-300">/</span>
+        <span class="font-mono font-semibold text-slate-900">#APP-2024-8849B</span>
+        <span class="text-slate-300">/</span>
+        <span class="font-semibold text-slate-800">Arthur Pendelton Vance</span>
+        <span class="px-2 py-0.5 rounded bg-blue-50 text-blue-700 font-mono text-[11px] font-semibold border border-blue-100">$250k Term Loan</span>
+      </div>
+
+      <div class="flex items-center gap-4 font-mono text-xs text-slate-500">
+        <span>SESSION: 992-019-B</span>
+        <span class="flex items-center gap-1 text-emerald-700 font-semibold">
+          <svg class="w-3.5 h-3.5 text-emerald-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M13 10V3L4 14h7v7l9-11h-7z"/>
+          </svg>
+          <span>LATENCY 8.4ms</span>
+        </span>
+      </div>
+    </div>
+
+    <!-- CENTRAL PRECISION VERIFICATION TERMINAL CARD -->
+    <div class="bg-white rounded-xl border border-slate-200 shadow-xs p-6 sm:p-8 flex flex-col gap-6 relative overflow-hidden">
+      <!-- Top Accent Progress Strip -->
+      <div class="absolute top-0 left-0 right-0 h-1.5 bg-slate-100">
+        <div id="top-bar-fill" class="h-full bg-slate-900 transition-all duration-700 w-[92%]"></div>
+      </div>
+
+      <!-- Execution Header -->
+      <div class="flex items-start gap-4">
+        <div class="w-11 h-11 rounded-xl bg-slate-900 text-sky-400 flex items-center justify-center flex-shrink-0 shadow-xs">
+          <svg class="w-6 h-6 animate-spin" fill="none" viewBox="0 0 24 24">
+            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="3"></circle>
+            <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+          </svg>
+        </div>
+        <div class="flex-1 min-w-0">
+          <div class="flex items-center gap-2 flex-wrap">
+            <h1 class="text-xl sm:text-2xl font-bold text-slate-900 tracking-tight">Verifying Staged Documentation</h1>
+            <span class="px-2 py-0.5 rounded-md bg-slate-100 text-slate-700 font-mono text-xs font-semibold border border-slate-200">Stage 3 of 3</span>
+          </div>
+          <p class="text-xs sm:text-sm text-slate-500 mt-1">
+            Reconciling Form 1003 (Declared), Chase 12M Checking CSV, and Paychex Payslip against institutional underwriting rules.
+          </p>
+        </div>
+      </div>
+
+      <!-- PIPELINE EXECUTION STEPS -->
+      <div class="flex flex-col gap-3.5">
+        
+        <!-- STEP 1: COMPLETED -->
+        <div class="bg-slate-50/80 rounded-xl p-4 border border-slate-200 flex flex-col gap-2">
+          <div class="flex items-center justify-between">
+            <div class="flex items-center gap-2.5">
+              <span class="w-5 h-5 rounded-full bg-emerald-600 text-white flex items-center justify-center flex-shrink-0 shadow-xs">
+                <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="3">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/>
+                </svg>
+              </span>
+              <span class="text-sm font-semibold text-slate-900">Step 1: Document OCR & Semantic Key Extraction</span>
+            </div>
+            <span class="font-mono text-xs font-semibold px-2 py-0.5 rounded bg-emerald-50 text-emerald-700 border border-emerald-200">
+              COMPLETE · 1.2s
+            </span>
+          </div>
+          <p class="text-xs text-slate-600 pl-7">
+            OCR Parsing & schema alignment verified. Extracted 48 atomic attributes with <strong class="text-slate-900 font-semibold">98.9% aggregate optical confidence</strong>.
+          </p>
+          <div class="flex flex-wrap gap-1.5 pl-7 pt-1">
+            <span class="px-2 py-0.5 rounded bg-white font-mono text-[11px] text-slate-700 border border-slate-200 flex items-center gap-1.5">
+              <span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>Gross Income ($100,000)
+            </span>
+            <span class="px-2 py-0.5 rounded bg-white font-mono text-[11px] text-slate-700 border border-slate-200 flex items-center gap-1.5">
+              <span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>Employer: Vance Dynamics Corp
+            </span>
+            <span class="px-2 py-0.5 rounded bg-white font-mono text-[11px] text-slate-700 border border-slate-200 flex items-center gap-1.5">
+              <span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>EIN: XX-XXX9401
+            </span>
+            <span class="px-2 py-0.5 rounded bg-white font-mono text-[11px] text-slate-700 border border-slate-200 flex items-center gap-1.5">
+              <span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>IBAN: US44CHAS8812
+            </span>
+          </div>
+        </div>
+
+        <!-- STEP 2: COMPLETED -->
+        <div class="bg-slate-50/80 rounded-xl p-4 border border-slate-200 flex flex-col gap-2">
+          <div class="flex items-center justify-between">
+            <div class="flex items-center gap-2.5">
+              <span class="w-5 h-5 rounded-full bg-emerald-600 text-white flex items-center justify-center flex-shrink-0 shadow-xs">
+                <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="3">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/>
+                </svg>
+              </span>
+              <span class="text-sm font-semibold text-slate-900">Step 2: Ledger Arithmetic & Continuity Validation</span>
+            </div>
+            <span class="font-mono text-xs font-semibold px-2 py-0.5 rounded bg-emerald-50 text-emerald-700 border border-emerald-200">
+              COMPLETE · 0.8s
+            </span>
+          </div>
+          <p class="text-xs text-slate-600 pl-7">
+            Arithmetic reconciliation verified: $8,333.33/mo gross &rarr; $6,140.22/mo net deductions. Verified continuous ledger with <strong class="text-slate-900 font-semibold">0 gap days</strong> across 365 days of bank transaction activity.
+          </p>
+          <div class="pl-7 pt-0.5 flex items-center gap-3 text-xs">
+            <span class="font-mono text-emerald-700 font-semibold flex items-center gap-1">
+              ✓ SANITY BOUNDS PASSED
+            </span>
+            <span class="text-slate-300">•</span>
+            <span class="font-mono text-slate-500">365 / 365 CYCLES SYNCHRONIZED</span>
+          </div>
+        </div>
+
+        <!-- STEP 3: IN PROGRESS -->
+        <div class="bg-white rounded-xl p-4 border-2 border-slate-900 shadow-xs flex flex-col gap-2.5 relative">
+          <div class="flex items-center justify-between">
+            <div class="flex items-center gap-2.5">
+              <span class="w-5 h-5 rounded-full bg-slate-900 text-sky-400 flex items-center justify-center flex-shrink-0">
+                <svg class="w-3 h-3 animate-spin" fill="none" viewBox="0 0 24 24">
+                  <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                  <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"></path>
+                </svg>
+              </span>
+              <span class="text-sm font-bold text-slate-900">Step 3: Cross-Document Entity & Income Verification</span>
+            </div>
+            <span id="step3-percentage" class="font-mono text-xs font-bold px-2 py-0.5 rounded bg-sky-50 text-sky-700 border border-sky-200 flex items-center gap-1.5">
+              <span class="w-1.5 h-1.5 rounded-full bg-sky-500 animate-pulse"></span>
+              92% COMPLETE
+            </span>
+          </div>
+          <p class="text-xs text-slate-600 pl-7">
+            Executing 14 underwriting policy rules: matching stated salary with direct deposits, validating employer corporate filing, and calculating uncommitted DTI debt ratio.
+          </p>
+          
+          <!-- Live Run Ticker -->
+          <div class="ml-7 bg-slate-900 rounded-lg p-2.5 font-mono text-xs text-white flex items-center justify-between gap-3 shadow-inner">
+            <div class="flex items-center gap-2 min-w-0">
+              <span class="text-sky-400 font-bold">RUN:</span>
+              <span id="ticker-text" class="text-slate-200 truncate">Comparing [Bank Recurring Payroll avg: $6,098.10] against [Payslip Net: $6,140.22]</span>
+            </div>
+            <span class="text-slate-400 text-[10px] uppercase tracking-wider flex-shrink-0">Thread #03</span>
+          </div>
+
+          <!-- Micro Progress Strip -->
+          <div class="ml-7 h-1.5 bg-slate-100 rounded-full overflow-hidden">
+            <div id="step-bar" class="h-full bg-sky-500 rounded-full transition-all duration-300 w-[92%]"></div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Master Progress & Controls -->
+      <div class="flex flex-col gap-3 pt-2">
+        <div class="flex items-center justify-between text-xs">
+          <div class="flex items-center gap-2">
+            <span class="font-semibold text-slate-900">Composite Pipeline Execution</span>
+            <span class="font-mono text-slate-500 font-medium">ID: ENG-4890-TX</span>
+          </div>
+          <span id="global-percentage-label" class="font-mono text-sm font-bold text-slate-900">92%</span>
+        </div>
+
+        <div class="w-full h-2.5 bg-slate-100 rounded-full overflow-hidden">
+          <div id="global-progress-bar" class="h-full bg-slate-900 rounded-full transition-all duration-500 w-[92%]"></div>
+        </div>
+
+        <div class="flex flex-wrap items-center justify-between gap-3 pt-2 text-xs">
+          <div class="flex items-center gap-1.5 text-slate-500">
+            <svg class="w-4 h-4 text-slate-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/>
+            </svg>
+            <span>Zero-Data Retention active. Transient memory purges immediately upon review.</span>
+          </div>
+
+          <a href="dashboard.html" class="px-3 py-1.5 rounded-lg border border-slate-200 bg-white hover:bg-rose-50 hover:text-rose-700 hover:border-rose-200 text-slate-600 font-semibold text-xs flex items-center gap-1.5 transition-all shadow-2xs">
+            <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+            </svg>
+            <span>Cancel Processing</span>
+          </a>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- FORENSIC DOCUMENT CHECK SUMMARY (3 CARDS) -->
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+      
+      <!-- Card 1 -->
+      <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-xs flex flex-col justify-between">
+        <div class="flex items-center justify-between">
+          <span class="text-xs font-semibold text-slate-900">Application Record</span>
+          <span class="font-mono text-[11px] font-bold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded border border-emerald-100 flex items-center gap-1">
+            <span class="w-1.5 h-1.5 rounded-full bg-emerald-600"></span>VALID
+          </span>
+        </div>
+        <div class="font-mono text-xs text-slate-500 font-medium mt-1">FORM-1003-RESIDENTIAL</div>
+        <div class="mt-3 pt-2.5 border-t border-slate-100 flex items-center justify-between font-mono text-[11px] text-slate-600">
+          <span>DECLARED: $100,000</span>
+          <span>CRC: 94F8A</span>
+        </div>
+      </div>
+
+      <!-- Card 2 -->
+      <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-xs flex flex-col justify-between">
+        <div class="flex items-center justify-between">
+          <span class="text-xs font-semibold text-slate-900">Chase Checking 12M</span>
+          <span class="font-mono text-[11px] font-bold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded border border-emerald-100 flex items-center gap-1">
+            <span class="w-1.5 h-1.5 rounded-full bg-emerald-600"></span>VALID
+          </span>
+        </div>
+        <div class="font-mono text-xs text-slate-500 font-medium mt-1">CHASE-STMT-OCT23-SEP24.CSV</div>
+        <div class="mt-3 pt-2.5 border-t border-slate-100 flex items-center justify-between font-mono text-[11px] text-slate-600">
+          <span>742 TRANS DETECTED</span>
+          <span>SHA-256 MATCH</span>
+        </div>
+      </div>
+
+      <!-- Card 3 -->
+      <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-xs flex flex-col justify-between">
+        <div class="flex items-center justify-between">
+          <span class="text-xs font-semibold text-slate-900">Paychex Payslip (Q3)</span>
+          <span class="font-mono text-[11px] font-bold text-sky-700 bg-sky-50 px-2 py-0.5 rounded border border-sky-100 flex items-center gap-1">
+            <span class="w-1.5 h-1.5 rounded-full bg-sky-500 animate-pulse"></span>CROSS-CHECKING
+          </span>
+        </div>
+        <div class="font-mono text-xs text-slate-500 font-medium mt-1">PAYSLIP_SEP24_VANCE.PDF</div>
+        <div class="mt-3 pt-2.5 border-t border-slate-100 flex items-center justify-between font-mono text-[11px] text-slate-600">
+          <span>YTD: $75,000.00</span>
+          <span>NET: $6,140.22</span>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- LIVE TERMINAL AUDIT STREAM -->
+    <div class="bg-slate-900 text-slate-200 rounded-xl p-4 shadow-sm border border-slate-800 flex flex-col gap-2.5 font-mono text-xs">
+      <div class="flex items-center justify-between pb-2 border-b border-slate-800">
+        <div class="flex items-center gap-2 text-slate-400 font-semibold uppercase tracking-wider text-[11px]">
+          <svg class="w-3.5 h-3.5 text-sky-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 9l3 3-3 3m5 0h3M5 20h14a2 2 0 002-2V6a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+          </svg>
+          <span>Underwriting Audit Event Stream</span>
+        </div>
+        <span class="text-emerald-400 font-bold flex items-center gap-1.5 text-[11px]">
+          <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
+          LIVE STREAM ACTIVE
+        </span>
+      </div>
+
+      <div class="space-y-1 text-[11px] text-slate-300">
+        <div class="flex items-center justify-between">
+          <span class="text-slate-400">[14:38:01.012] RULE_INC_01: Gross monthly threshold sanity verification</span>
+          <span class="text-emerald-400 font-semibold">PASS (0.02ms)</span>
+        </div>
+        <div class="flex items-center justify-between">
+          <span class="text-slate-400">[14:38:01.189] RULE_EMP_09: Employer corporate registry active status validation</span>
+          <span class="text-emerald-400 font-semibold">PASS (0.04ms)</span>
+        </div>
+        <div class="flex items-center justify-between text-white">
+          <span class="flex items-center gap-1.5">
+            <span class="text-sky-400 font-bold">&gt;</span>
+            <span id="terminal-cursor-text">Evaluating: [Field: Annual Salary $100,000 vs Bank Aggregate Deposits $98,420] ...</span>
+          </span>
+          <span class="text-sky-400 font-bold animate-pulse">RUNNING</span>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- SCRIPT FOR PROGRESSION -->
+  <script>
+    (function() {
+      const tickers = [
+        "Comparing [Bank Recurring Payroll avg: $6,098.10] against [Payslip Net: $6,140.22]",
+        "Auditing state registry: Vance Dynamics Corp (Delaware LLC active status)",
+        "Verifying YTD aggregate progression curve against stated $100k salary",
+        "Calculating secondary DTI ratio including auto-lease debit ($420.00/mo)",
+        "Finalizing composite audit report and signing deterministic hash..."
+      ];
+
+      const terminalLogs = [
+        "Evaluating: [Field: Annual Salary $100,000 vs Bank Aggregate Deposits $98,420] ...",
+        "Evaluating: [Entity Match: Employer Tax ID matching payroll remitter] ...",
+        "Evaluating: [DTI Ratio: Aggregating credit bureau reported recurring debt obligations] ...",
+        "Compiling cryptographic underwriting proof for Sarah Jenkins review queue..."
+      ];
+
+      let tickerIndex = 0;
+      let terminalIndex = 0;
+      let progress = 92;
+
+      const tickerEl = document.getElementById("ticker-text");
+      const terminalEl = document.getElementById("terminal-cursor-text");
+      const stepBar = document.getElementById("step-bar");
+      const topBar = document.getElementById("top-bar-fill");
+      const globalBar = document.getElementById("global-progress-bar");
+      const step3Label = document.getElementById("step3-percentage");
+      const globalLabel = document.getElementById("global-percentage-label");
+
+      setInterval(() => {
+        tickerIndex = (tickerIndex + 1) % tickers.length;
+        if (tickerEl) tickerEl.textContent = tickers[tickerIndex];
+      }, 2400);
+
+      setInterval(() => {
+        terminalIndex = (terminalIndex + 1) % terminalLogs.length;
+        if (terminalEl) terminalEl.textContent = terminalLogs[terminalIndex];
+      }, 3200);
+
+      setInterval(() => {
+        if (progress < 98) {
+          progress += 1;
+          const widthStr = progress + "%";
+          if (stepBar) stepBar.style.width = widthStr;
+          if (topBar) topBar.style.width = widthStr;
+          if (globalBar) globalBar.style.width = widthStr;
+          if (step3Label) step3Label.innerHTML = `<span class="w-1.5 h-1.5 rounded-full bg-sky-500 animate-pulse"></span>${progress}% COMPLETE`;
+          if (globalLabel) globalLabel.textContent = progress + "%";
+        }
+      }, 3800);
+    })();
+  </script>
+</body>
+</html>

@@ -1,0 +1,9 @@
+{
+  "applicant_id": "APP010",
+  "active_loans": [
+    {
+      "lender": "Kotak",
+      "monthly_emi": 22000
+    }
+  ]
+}

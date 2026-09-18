@@ -1,0 +1,9 @@
+{
+  "applicant_id": "APP007",
+  "active_loans": [
+    {
+      "lender": "ICICI Bank",
+      "monthly_emi": 35000
+    }
+  ]
+}

@@ -1,0 +1,9 @@
+{
+  "applicant_id": "APP002",
+  "active_loans": [
+    {
+      "lender": "HDFC Bank",
+      "monthly_emi": 10000
+    }
+  ]
+}

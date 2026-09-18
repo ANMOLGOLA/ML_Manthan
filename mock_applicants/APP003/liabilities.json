@@ -1,0 +1,9 @@
+{
+  "applicant_id": "APP003",
+  "active_loans": [
+    {
+      "lender": "Bajaj Finserv",
+      "monthly_emi": 18500
+    }
+  ]
+}

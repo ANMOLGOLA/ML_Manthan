@@ -1,0 +1,9 @@
+{
+  "applicant_id": "APP004",
+  "active_loans": [
+    {
+      "lender": "Axis Bank",
+      "monthly_emi": 5000
+    }
+  ]
+}
